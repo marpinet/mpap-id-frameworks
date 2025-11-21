@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Interactive framework workspace for design thinking and strategic planning">
+    <title>Framework - MPAP Frameworks</title>
+    
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="stylesheet" href="/src/styles/main.css">
+</head>
+<body class="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <!-- Navigation -->
+    <nav class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="/" class="text-2xl font-bold text-primary-600 dark:text-primary-400">
+                        MPAP Frameworks
+                    </a>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <button id="theme-toggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" aria-label="Toggle theme">
+                        <svg class="w-5 h-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/>
+                        </svg>
+                        <svg class="w-5 h-5 dark:hidden" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+                        </svg>
+                    </button>
+                    <button id="save-framework-btn" class="btn-primary">
+                        Save Framework
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Framework Header -->
+        <div class="mb-8">
+            <div class="flex items-center space-x-4 mb-4">
+                <span id="framework-icon" class="text-4xl">📋</span>
+                <div>
+                    <h1 id="framework-title" class="text-3xl font-bold text-gray-900 dark:text-white">Loading...</h1>
+                    <p id="framework-category" class="text-sm text-gray-600 dark:text-gray-400">Category</p>
+                </div>
+            </div>
+            <p id="framework-description" class="text-lg text-gray-700 dark:text-gray-300"></p>
+        </div>
+
+        <!-- Interaction Mode Tabs -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md mb-6">
+            <div class="border-b border-gray-200 dark:border-gray-700">
+                <nav class="flex -mb-px" role="tablist">
+                    <button data-tab="guided" class="tab-button active flex-1 py-4 px-6 text-center font-medium border-b-2 border-primary-600 text-primary-600 dark:text-primary-400">
+                        <span class="text-xl mr-2">📝</span>
+                        Guided Steps
+                    </button>
+                    <button data-tab="upload" class="tab-button flex-1 py-4 px-6 text-center font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+                        <span class="text-xl mr-2">📤</span>
+                        Upload Files
+                    </button>
+                    <button data-tab="ai-chat" class="tab-button flex-1 py-4 px-6 text-center font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+                        <span class="text-xl mr-2">💬</span>
+                        AI Chat
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="p-6">
+                <!-- Guided Steps Tab -->
+                <div id="guided-tab" class="tab-content">
+                    <div class="mb-6">
+                        <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Complete the framework sections below</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Fill in each section with your information. Your progress is automatically saved.</p>
+                    </div>
+                    <div id="framework-sections" class="space-y-6">
+                        <!-- Sections will be populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- Upload Files Tab -->
+                <div id="upload-tab" class="tab-content hidden">
+                    <div class="text-center py-12">
+                        <div class="mb-6">
+                            <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Upload your files</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-6">Upload documents, images, or data to automatically populate framework sections</p>
+                        <div class="max-w-xl mx-auto">
+                            <label for="file-upload" class="cursor-pointer btn-primary inline-block">
+                                Choose Files
+                                <input id="file-upload" type="file" multiple class="hidden" accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png">
+                            </label>
+                            <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Supported: PDF, DOC, DOCX, TXT, JPG, PNG</p>
+                        </div>
+                        <div id="uploaded-files" class="mt-6 space-y-2 max-w-xl mx-auto hidden">
+                            <!-- Uploaded files will appear here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Chat Tab -->
+                <div id="ai-chat-tab" class="tab-content hidden">
+                    <div class="flex flex-col h-96">
+                        <div id="chat-messages" class="flex-1 overflow-y-auto space-y-4 mb-4 p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
+                            <div class="text-center text-gray-500 dark:text-gray-400 py-8">
+                                <p class="mb-2">💬 AI Chat Assistant</p>
+                                <p class="text-sm">Ask questions, request research, or get help completing this framework</p>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <input type="text" id="chat-input" placeholder="Ask the AI to help with this framework..." class="input-field flex-1" disabled>
+                            <button id="send-chat-btn" class="btn-primary" disabled>
+                                Send
+                            </button>
+                        </div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">AI chat coming soon - this feature will help you research and complete frameworks</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex justify-between items-center">
+            <a href="/" class="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400">
+                ← Back to Home
+            </a>
+            <div class="space-x-3">
+                <button id="export-pdf-btn" class="btn-secondary">
+                    Export as PDF
+                </button>
+                <button id="save-framework-btn-bottom" class="btn-primary">
+                    Save Framework
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Save Success Modal -->
+    <div id="save-success-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full p-6 text-center">
+            <div class="mb-4">
+                <svg class="mx-auto h-16 w-16 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+            <h3 class="text-xl font-bold mb-2 text-gray-900 dark:text-white">Framework Saved!</h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-6">Your work has been saved to your profile</p>
+            <div class="space-x-3">
+                <button data-close-modal="save-success-modal" class="btn-secondary">
+                    Continue Editing
+                </button>
+                <a href="/profile.html" class="btn-primary inline-block">
+                    View Profile
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/src/js/framework-page.js"></script>
+</body>
+</html>

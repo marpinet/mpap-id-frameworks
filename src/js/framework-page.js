@@ -263,12 +263,163 @@ function initializeThemeToggle() {
     });
 }
 
+// Demo AI Chat functionality
+function initializeDemoAIChat() {
+    const chatInput = document.getElementById('chat-input');
+    const sendButton = document.getElementById('send-chat-btn');
+    const chatMessages = document.getElementById('chat-messages');
+    
+    // Enable the chat (demo mode)
+    chatInput.disabled = false;
+    sendButton.disabled = false;
+    
+    // Update placeholder
+    chatInput.placeholder = 'Ask the AI for help (Demo Mode)...';
+    
+    // Remove "coming soon" message
+    const comingSoon = chatMessages.querySelector('.text-center');
+    if (comingSoon) {
+        comingSoon.remove();
+    }
+    
+    const sendMessage = async () => {
+        const message = chatInput.value.trim();
+        if (!message) return;
+        
+        // Add user message
+        const userMsg = document.createElement('div');
+        userMsg.className = 'flex justify-end';
+        userMsg.innerHTML = `
+            <div class="bg-primary-600 text-white rounded-lg px-4 py-2 max-w-[80%]">
+                ${message}
+            </div>
+        `;
+        chatMessages.appendChild(userMsg);
+        
+        // Clear input
+        chatInput.value = '';
+        
+        // Scroll to bottom
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        
+        // Show typing indicator
+        const typingMsg = document.createElement('div');
+        typingMsg.className = 'flex justify-start';
+        typingMsg.innerHTML = `
+            <div class="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg px-4 py-2">
+                <span class="animate-pulse">AI is thinking...</span>
+            </div>
+        `;
+        chatMessages.appendChild(typingMsg);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        
+        // Simulate AI response after delay
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        // Remove typing indicator
+        typingMsg.remove();
+        
+        // Generate demo response based on framework
+        const response = generateDemoResponse(message);
+        
+        const aiMsg = document.createElement('div');
+        aiMsg.className = 'flex justify-start';
+        aiMsg.innerHTML = `
+            <div class="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg px-4 py-2 max-w-[80%]">
+                ${response}
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 italic">Note: This is a demo response. Real AI integration coming soon!</p>
+            </div>
+        `;
+        chatMessages.appendChild(aiMsg);
+        
+        // Scroll to bottom
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    };
+    
+    sendButton.addEventListener('click', sendMessage);
+    chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+}
+
+function generateDemoResponse(userMessage) {
+    const message = userMessage.toLowerCase();
+    
+    // Context-aware responses based on current framework
+    if (message.includes('help') || message.includes('how')) {
+        return `I can help you complete the ${currentFramework?.name || 'framework'}! Each section has specific guidance. Would you like me to suggest content for a particular section, or would you like general tips for completing this framework?`;
+    }
+    
+    if (message.includes('example') || message.includes('sample')) {
+        return `Here's an example for the ${currentFramework?.name || 'framework'}:\n\nFor the first section, you might write: "Our project aims to improve user engagement by 40% through redesigning the onboarding experience. We'll focus on reducing friction points and providing clear value propositions."\n\nWould you like more specific examples for other sections?`;
+    }
+    
+    if (message.includes('research') || message.includes('data')) {
+        return `I can help you find relevant research! For ${currentFramework?.name || 'this framework'}, I'd recommend looking into:\n\n• Industry benchmarks and case studies\n• User research methodologies\n• Best practices from similar projects\n\nWhat specific area would you like me to research further?`;
+    }
+    
+    if (message.includes('stakeholder') || message.includes('people')) {
+        return `For stakeholder analysis, consider identifying:\n\n1. Primary stakeholders (directly impacted)\n2. Secondary stakeholders (indirectly affected)\n3. Key influencers and decision-makers\n4. End users and beneficiaries\n\nWould you like help mapping their relationships or influence levels?`;
+    }
+    
+    // Default helpful response
+    return `I understand you're asking about "${userMessage}". In the context of ${currentFramework?.name || 'this framework'}, I can help by:\n\n• Providing examples and templates\n• Researching relevant information\n• Suggesting best practices\n• Reviewing your content\n\nWhat specific aspect would you like me to focus on?`;
+}
+
+// Demo file processing
+function enhanceFileUpload() {
+    const fileInput = document.getElementById('file-upload');
+    
+    fileInput?.addEventListener('change', async (e) => {
+        const files = Array.from(e.target.files);
+        if (files.length === 0) return;
+        
+        const uploadedFilesContainer = document.getElementById('uploaded-files');
+        uploadedFilesContainer.classList.remove('hidden');
+        uploadedFilesContainer.innerHTML = '';
+        
+        files.forEach(async (file) => {
+            const fileEl = document.createElement('div');
+            fileEl.className = 'flex items-center justify-between p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700';
+            fileEl.innerHTML = `
+                <div class="flex items-center space-x-3">
+                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                    </svg>
+                    <div>
+                        <span class="text-sm text-gray-700 dark:text-gray-300">${file.name}</span>
+                        <p class="text-xs text-gray-500">Processing...</p>
+                    </div>
+                </div>
+                <span class="text-xs text-gray-500">${(file.size / 1024).toFixed(1)} KB</span>
+            `;
+            uploadedFilesContainer.appendChild(fileEl);
+            
+            // Simulate processing
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            const statusEl = fileEl.querySelector('p');
+            statusEl.textContent = 'Processed (Demo)';
+            statusEl.classList.add('text-green-600');
+        });
+        
+        // Show demo message after processing
+        setTimeout(() => {
+            showSuccess('Files processed! In production, AI would analyze these and populate framework sections.');
+        }, 2500);
+    });
+}
+
 // Initialize everything
 document.addEventListener('DOMContentLoaded', () => {
     initializePage();
     initializeTabs();
     initializeFileUpload();
     initializeThemeToggle();
+    initializeDemoAIChat();
+    enhanceFileUpload();
     
     // Save button listeners
     document.getElementById('save-framework-btn')?.addEventListener('click', saveFramework);

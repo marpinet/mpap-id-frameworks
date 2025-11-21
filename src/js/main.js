@@ -1,3 +1,22 @@
+// Import Supabase and Auth
+import { supabase, auth } from './supabase.js';
+import { initializeAuth } from './auth.js';
+
+// Test Supabase connection on page load
+(async () => {
+    console.log('🔄 Testing Supabase connection...');
+    
+    const { session, error: sessionError } = await auth.getSession();
+    if (sessionError) {
+        console.error('❌ Supabase connection failed:', sessionError.message);
+    } else {
+        console.log('✅ Supabase connected successfully!');
+    }
+})();
+
+// Initialize authentication system
+initializeAuth();
+
 // Theme Toggle
 const themeToggle = document.getElementById('theme-toggle');
 const html = document.documentElement;

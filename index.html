@@ -48,8 +48,8 @@
                         <button id="login-btn" class="btn-secondary mr-2">Login</button>
                         <button id="signup-btn" class="btn-primary">Sign Up</button>
                     </div>
-                    <div id="user-menu" class="hidden">
-                        <button id="profile-btn" class="btn-secondary mr-2">Profile</button>
+                    <div id="user-menu" class="hidden flex items-center">
+                        <a href="/profile.html" id="profile-btn" class="btn-secondary mr-2">Profile</a>
                         <button id="logout-btn" class="btn-secondary">Logout</button>
                     </div>
                 </div>
@@ -217,6 +217,101 @@
             </div>
         </div>
     </footer>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Log In</h2>
+                <button data-close-modal="login-modal" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div id="login-error" class="hidden mb-4 p-3 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200 rounded-lg text-sm"></div>
+            
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label for="login-email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
+                    <input type="email" id="login-email" required class="input-field" placeholder="you@example.com">
+                </div>
+                
+                <div>
+                    <label for="login-password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
+                    <input type="password" id="login-password" required class="input-field" placeholder="••••••••">
+                </div>
+                
+                <button type="submit" class="w-full btn-primary">
+                    Log In
+                </button>
+            </form>
+            
+            <div class="mt-4 text-center text-sm text-gray-600 dark:text-gray-400">
+                Don't have an account? 
+                <a href="#" id="switch-to-signup" class="text-primary-600 dark:text-primary-400 hover:underline font-medium">Sign up</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signup-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Sign Up</h2>
+                <button data-close-modal="signup-modal" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div id="signup-error" class="hidden mb-4 p-3 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200 rounded-lg text-sm"></div>
+            
+            <form id="signup-form" class="space-y-4">
+                <div>
+                    <label for="signup-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Full Name</label>
+                    <input type="text" id="signup-name" required class="input-field" placeholder="John Doe">
+                </div>
+                
+                <div>
+                    <label for="signup-email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
+                    <input type="email" id="signup-email" required class="input-field" placeholder="you@example.com">
+                </div>
+                
+                <div>
+                    <label for="signup-password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
+                    <input type="password" id="signup-password" required minlength="6" class="input-field" placeholder="••••••••">
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">At least 6 characters</p>
+                </div>
+                
+                <div>
+                    <label for="signup-confirm-password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Confirm Password</label>
+                    <input type="password" id="signup-confirm-password" required minlength="6" class="input-field" placeholder="••••••••">
+                </div>
+                
+                <button type="submit" class="w-full btn-primary">
+                    Create Account
+                </button>
+            </form>
+            
+            <div class="mt-4 text-center text-sm text-gray-600 dark:text-gray-400">
+                Already have an account? 
+                <a href="#" id="switch-to-login" class="text-primary-600 dark:text-primary-400 hover:underline font-medium">Log in</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Message -->
+    <div id="success-message" class="hidden fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+        Success!
+    </div>
+
+    <!-- Error Message -->
+    <div id="error-message" class="hidden fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+        Error!
+    </div>
 
     <!-- Scripts -->
     <script type="module" src="/src/js/main.js"></script>

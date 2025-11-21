@@ -16,20 +16,32 @@ The framework includes the following components:
    - Industry/Market Segment
    - Key Offerings
    - Market Position (e.g., market share, revenue, customer base)
+   - Example: Competitor A is a leading provider of cloud storage solutions with a 30% market share.
 
 2. **Buyer Utility Analysis**:
    - Map competitors’ offerings across the Buyer Utility Map dimensions:
      - **Utility Levers**: Performance, simplicity, convenience, risk reduction, fun/image, environmental friendliness.
      - **Buyer Experience Stages**: Purchase, delivery, use, supplements, maintenance, disposal.
    - Identify areas where competitors create value and where gaps exist.
+   - Example: Competitor B excels in convenience during the purchase stage but lacks in maintenance support.
 
 3. **Opportunities for Differentiation**:
    - Highlight areas where the user’s offering can stand out.
    - Identify unmet needs or underserved buyer experience stages.
+   - Example: Introducing a subscription model to address gaps in affordability.
 
 4. **Market Threats**:
    - Analyze competitors’ strengths that pose risks to the user’s offering.
    - Highlight areas where competitors dominate the Buyer Utility Map.
+   - Example: Competitor C’s strong brand loyalty and extensive distribution network.
+
+## Definitions
+- **Buyer Utility Map**: A tool to analyze how a product or service creates value for customers across different utility levers and experience stages.
+- **Market Position**: The standing of a company relative to its competitors in the industry.
+
+## Sources
+- Kim, W. C., & Mauborgne, R. (2005). *Blue Ocean Strategy: How to Create Uncontested Market Space and Make the Competition Irrelevant*. Harvard Business Review Press.
+- Harvard Business Review. (n.d.). *Understanding Competitive Advantage*. Retrieved from https://hbr.org
 
 ## Interaction Methods
 Users can interact with the Competitor Mapping framework in three ways:

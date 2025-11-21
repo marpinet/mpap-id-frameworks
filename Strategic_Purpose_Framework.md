@@ -32,6 +32,15 @@ The framework includes the following components:
    - Ensure the purpose statement aligns with the organization’s long-term goals and core values.
    - Provide a checklist or criteria for alignment.
 
+## Definitions
+- **Purpose Statement**: A concise declaration of an organization’s reason for existence and its intended impact.
+- **Jobs to Be Done**: Specific actions or tasks undertaken to achieve the organization’s purpose.
+- **Alignment**: The degree to which the purpose statement supports the organization’s goals and values.
+
+## Sources
+- Christensen, C. M., Hall, T., Dillon, K., & Duncan, D. S. (2016). *Competing Against Luck: The Story of Innovation and Customer Choice*. HarperBusiness.
+- Harvard Business Review. (n.d.). *How to Define Your Organization’s Purpose*. Retrieved from https://hbr.org
+
 ## Interaction Methods
 Users can interact with the Strategic Purpose framework in three ways:
 1. **Upload Files**: Upload mission statements, strategic plans, or organizational values to auto-fill sections of the framework.

@@ -12,13 +12,29 @@ The Project Brief framework helps teams:
 The Project Brief includes the following sections:
 
 1. **Project Purpose**: A concise statement of why the project exists.
+   - Example: "To develop a mobile app that simplifies personal finance management."
 2. **Goals**: The primary objectives the project aims to achieve.
+   - Example: "Increase user adoption by 20% within the first year."
 3. **Stakeholders**:
    - **Roles**: Define the roles of key stakeholders.
+     - Example: Project Manager, Developers, Marketing Team.
    - **Responsibilities**: Outline what each stakeholder is responsible for.
+     - Example: Developers are responsible for coding and testing the app.
    - **Communication Plan**: Describe how stakeholders will communicate and collaborate.
+     - Example: Weekly progress meetings and daily updates via Slack.
 4. **Timeline and Milestones**: A high-level timeline with key milestones.
+   - Example: "Prototype completion by Q1, beta testing by Q2, launch by Q3."
 5. **Key Risks and Challenges**: Potential obstacles or risks that could impact the project.
+   - Example: "Delays in development due to resource constraints."
+
+## Definitions
+- **Project Purpose**: The reason for initiating the project and the value it aims to deliver.
+- **Milestones**: Significant points or events in the project timeline.
+- **Stakeholders**: Individuals or groups with an interest in the project’s success.
+
+## Sources
+- PMI. (2021). *A Guide to the Project Management Body of Knowledge (PMBOK® Guide)*. Project Management Institute.
+- Harvard Business Review. (n.d.). *How to Write a Project Brief*. Retrieved from https://hbr.org
 
 ## Interaction Methods
 Users can interact with the Project Brief framework in three ways:

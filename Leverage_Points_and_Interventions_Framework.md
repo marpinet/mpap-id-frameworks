@@ -12,14 +12,27 @@ The Leverage Points and Interventions framework helps teams:
 The framework includes the following components:
 
 1. **System Overview**: Provide a high-level description of the system being analyzed.
+   - Example: A supply chain system with multiple vendors and distribution centers.
 2. **Leverage Points**: Identify points within the system where small changes can lead to significant improvements.
    - Categorize leverage points (e.g., parameters, feedback loops, system structure, or goals).
+   - Example: Adjusting inventory levels to reduce waste.
 3. **Intervention Opportunities**: Define specific actions or changes that can be made at each leverage point.
    - Assess the potential impact of each intervention.
    - Evaluate the feasibility of implementing each intervention.
+   - Example: Implementing real-time tracking to improve delivery efficiency.
 4. **Prioritization**: Rank leverage points and interventions based on their potential impact and feasibility.
+   - Example: Prioritizing interventions that are low-cost and high-impact.
 5. **Action Plan**: Develop a plan for implementing the top-priority interventions.
    - Include timelines, responsibilities, and success metrics.
+   - Example: Assigning a team to oversee the implementation of a new software tool.
+
+## Definitions
+- **Leverage Points**: Places within a system where a small change can lead to significant improvements.
+- **Intervention Opportunities**: Specific actions or changes that can be made at leverage points to improve the system.
+
+## Sources
+- Meadows, D. H. (2008). *Thinking in Systems: A Primer*. Chelsea Green Publishing.
+- Harvard Business Review. (n.d.). *Understanding Systems Thinking*. Retrieved from https://hbr.org
 
 ## Interaction Methods
 Users can interact with the Leverage Points and Interventions framework in three ways:

@@ -14,21 +14,33 @@ The framework includes the following components:
 1. **Stakeholder Identification**:
    - List all relevant stakeholders.
    - Define their roles in the project or system.
+   - Example: Stakeholder A (Role: Project Manager, Influence: High, Interest: High).
 
 2. **Stakeholder Categorization**:
    - Map stakeholders based on:
      - **Influence**: High, medium, or low.
      - **Interest**: High, medium, or low.
    - Place stakeholders in a 2x2 matrix (Influence vs. Interest).
+   - Example: Stakeholder B (Influence: Medium, Interest: High).
 
 3. **Stakeholder Roles**:
    - Define the specific roles and responsibilities of each stakeholder.
    - Highlight key decision-makers, contributors, and affected parties.
+   - Example: Stakeholder C is responsible for approving project budgets.
 
 4. **Optional: 8 Capitals Analysis**:
    - Assess stakeholders’ contributions across the 8 capitals of innovation:
      - Financial, Political, Social, Digital, Natural, Manufactured, Cultural, Human.
    - Identify which stakeholders provide critical resources in each capital.
+   - Example: Stakeholder D contributes significantly to Social and Human Capital.
+
+## Definitions
+- **Stakeholder Mapping**: The process of identifying and categorizing stakeholders based on their influence, interest, and roles.
+- **Influence vs. Interest Matrix**: A tool to categorize stakeholders based on their level of influence and interest in the project.
+
+## Sources
+- Mendelow, A. L. (1991). *Stakeholder Mapping Techniques*. Proceedings of the 2nd International Conference on Information Systems.
+- Harvard Business Review. (n.d.). *Understanding Stakeholder Dynamics*. Retrieved from https://hbr.org
 
 ## Interaction Methods
 Users can interact with the Stakeholder Mapping framework in three ways:

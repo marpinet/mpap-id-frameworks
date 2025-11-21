@@ -13,11 +13,26 @@ The System Mapping framework includes the following components:
 
 1. **Stakeholders**: Identify all relevant stakeholders within the system.
    - Define their roles and influence within the system.
+   - Example: Stakeholder A (Role: Supplier, Influence: High).
+
 2. **Relationships**: Map the connections and interactions between stakeholders.
    - Highlight dependencies and areas of collaboration or conflict.
+   - Example: Stakeholder A depends on Stakeholder B for raw materials.
+
 3. **Power Dynamics**: Analyze the distribution of power and influence within the system.
    - Identify stakeholders with the most control or influence.
+   - Example: Stakeholder C has significant influence due to their control over key resources.
+
 4. **Leverage Points**: Highlight areas within the system where small changes could lead to significant impacts.
+   - Example: Improving communication between Stakeholder A and Stakeholder B to reduce delays.
+
+## Definitions
+- **System Mapping**: The process of visualizing relationships, dependencies, and power dynamics within a system.
+- **Leverage Points**: Areas within a system where small changes can lead to significant improvements.
+
+## Sources
+- Meadows, D. H. (2008). *Thinking in Systems: A Primer*. Chelsea Green Publishing.
+- Harvard Business Review. (n.d.). *How to Map Systems for Better Decision-Making*. Retrieved from https://hbr.org
 
 ## Interaction Methods
 Users can interact with the System Mapping framework in three ways:

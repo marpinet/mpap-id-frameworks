@@ -13,19 +13,29 @@ The framework includes the following components:
 
 1. **Facts**:
    - Individual data points or observations from research.
-   - Examples: "50% of users prefer X," "Customer feedback highlights Y."
+   - Example: "50% of users prefer X," "Customer feedback highlights Y."
 
 2. **Key Findings**:
    - Patterns or trends derived from 3+ related facts.
-   - Examples: "Users prefer X because of its simplicity."
+   - Example: "Users prefer X because of its simplicity."
 
 3. **Insights**:
    - Deeper understanding or interpretation derived from 3+ key findings.
-   - Examples: "Simplicity is a critical driver of user satisfaction."
+   - Example: "Simplicity is a critical driver of user satisfaction."
 
 4. **Themes**:
    - Overarching concepts or strategic directions derived from 3+ insights.
-   - Examples: "Focus on simplicity to enhance user experience."
+   - Example: "Focus on simplicity to enhance user experience."
+
+## Definitions
+- **Facts**: Individual data points or observations collected during research.
+- **Key Findings**: Patterns or trends identified from multiple related facts.
+- **Insights**: Deeper understanding or interpretation derived from key findings.
+- **Themes**: Overarching concepts or strategic directions based on insights.
+
+## Sources
+- Stickdorn, M., & Schneider, J. (2011). *This is Service Design Thinking: Basics, Tools, Cases*. Wiley.
+- Harvard Business Review. (n.d.). *How to Synthesize Research Findings*. Retrieved from https://hbr.org
 
 ## Interaction Methods
 Users can interact with the Synthesize Research framework in three ways:

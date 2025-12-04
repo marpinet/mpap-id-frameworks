@@ -11,6 +11,11 @@ let frameworkData = {};
 let currentUser = null;
 let currentStepIndex = 0;
 
+// Auto-save state
+let autoSaveTimeout = null;
+let hasUnsavedChanges = false;
+let lastSavedTime = null;
+
 // Initialize page
 async function initializePage() {
     // Initialize auth
@@ -224,6 +229,7 @@ function renderCurrentStep() {
     textarea.addEventListener('input', (e) => {
         frameworkData[section.id] = e.target.value;
         saveToLocalStorage();
+        triggerAutoSave();
     });
 }
 
@@ -987,6 +993,218 @@ async function processFilesWithAI() {
     document.getElementById('ai-processing-section').classList.add('hidden');
 }
 
+// ============================================================================
+// AUTO-SAVE & WORKFLOW IMPROVEMENTS
+// ============================================================================
+
+/**
+ * Trigger auto-save with debouncing
+ */
+function triggerAutoSave() {
+    hasUnsavedChanges = true;
+    updateAutoSaveIndicator('unsaved');
+    
+    // Clear existing timeout
+    if (autoSaveTimeout) {
+        clearTimeout(autoSaveTimeout);
+    }
+    
+    // Set new timeout for auto-save (3 seconds after last change)
+    autoSaveTimeout = setTimeout(async () => {
+        if (currentUser && hasUnsavedChanges) {
+            await autoSaveFramework();
+        }
+    }, 3000);
+}
+
+/**
+ * Auto-save framework silently
+ */
+async function autoSaveFramework() {
+    if (!currentUser) return;
+    
+    updateAutoSaveIndicator('saving');
+    
+    try {
+        await db.saveUserFramework(
+            currentUser.id,
+            frameworkId,
+            currentFramework.name,
+            frameworkData
+        );
+        
+        hasUnsavedChanges = false;
+        lastSavedTime = new Date();
+        updateAutoSaveIndicator('saved');
+        
+        // Hide "saved" indicator after 2 seconds
+        setTimeout(() => {
+            if (!hasUnsavedChanges) {
+                updateAutoSaveIndicator('hidden');
+            }
+        }, 2000);
+        
+    } catch (error) {
+        console.error('Auto-save failed:', error);
+        updateAutoSaveIndicator('error');
+    }
+}
+
+/**
+ * Update auto-save indicator UI
+ */
+function updateAutoSaveIndicator(state) {
+    const indicator = document.getElementById('autosave-indicator');
+    const text = document.getElementById('autosave-text');
+    const savedIcon = document.getElementById('autosave-saved-icon');
+    const savingIcon = document.getElementById('autosave-saving-icon');
+    
+    if (!indicator) return;
+    
+    // Hide all icons first
+    savedIcon.classList.add('hidden');
+    savingIcon.classList.add('hidden');
+    
+    switch (state) {
+        case 'saving':
+            indicator.classList.remove('hidden');
+            savingIcon.classList.remove('hidden');
+            text.textContent = 'Saving...';
+            text.className = 'text-gray-600 dark:text-gray-400';
+            break;
+            
+        case 'saved':
+            indicator.classList.remove('hidden');
+            savedIcon.classList.remove('hidden');
+            text.textContent = 'All changes saved';
+            text.className = 'text-green-600 dark:text-green-400';
+            break;
+            
+        case 'unsaved':
+            indicator.classList.remove('hidden');
+            text.textContent = 'Unsaved changes';
+            text.className = 'text-yellow-600 dark:text-yellow-400';
+            break;
+            
+        case 'error':
+            indicator.classList.remove('hidden');
+            text.textContent = 'Save failed';
+            text.className = 'text-red-600 dark:text-red-400';
+            break;
+            
+        case 'hidden':
+            indicator.classList.add('hidden');
+            break;
+    }
+}
+
+/**
+ * Initialize keyboard shortcuts
+ */
+function initializeKeyboardShortcuts() {
+    document.addEventListener('keydown', (e) => {
+        // Check for Ctrl/Cmd key
+        const modifier = e.ctrlKey || e.metaKey;
+        
+        if (!modifier) return;
+        
+        // Ctrl/Cmd + S: Save
+        if (e.key === 's') {
+            e.preventDefault();
+            saveFramework();
+        }
+        
+        // Ctrl/Cmd + E: Export PDF
+        else if (e.key === 'e') {
+            e.preventDefault();
+            exportAsPDF();
+        }
+        
+        // Ctrl/Cmd + K: Show shortcuts
+        else if (e.key === 'k') {
+            e.preventDefault();
+            modal.open('shortcuts-modal');
+        }
+        
+        // Ctrl/Cmd + /: Toggle AI chat
+        else if (e.key === '/') {
+            e.preventDefault();
+            switchTab('ai-chat');
+        }
+        
+        // Ctrl/Cmd + 1/2/3: Switch tabs
+        else if (e.key === '1') {
+            e.preventDefault();
+            switchTab('guided');
+        }
+        else if (e.key === '2') {
+            e.preventDefault();
+            switchTab('upload');
+        }
+        else if (e.key === '3') {
+            e.preventDefault();
+            switchTab('ai-chat');
+        }
+        
+        // Ctrl/Cmd + Arrow keys: Navigate steps
+        else if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            nextStep();
+        }
+        else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            previousStep();
+        }
+        else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        else if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+        
+        // Ctrl/Cmd + I: Focus input
+        else if (e.key === 'i') {
+            e.preventDefault();
+            document.getElementById('current-step-input')?.focus();
+        }
+        
+        // Ctrl/Cmd + D: Clear current section
+        else if (e.key === 'd') {
+            e.preventDefault();
+            if (confirm('Clear current section?')) {
+                const section = frameworkSteps[currentStepIndex];
+                frameworkData[section.id] = '';
+                document.getElementById('current-step-input').value = '';
+                triggerAutoSave();
+            }
+        }
+    });
+}
+
+/**
+ * Next step function for keyboard shortcut
+ */
+function nextStep() {
+    const nextBtn = document.querySelector('[onclick*="nextStep"]') || 
+                    document.querySelector('.next-step-btn');
+    if (nextBtn && !nextBtn.disabled) {
+        nextBtn.click();
+    }
+}
+
+/**
+ * Previous step function for keyboard shortcut
+ */
+function previousStep() {
+    const prevBtn = document.querySelector('[onclick*="previousStep"]') || 
+                    document.querySelector('.prev-step-btn');
+    if (prevBtn && !prevBtn.disabled) {
+        prevBtn.click();
+    }
+}
+
 // Initialize everything
 document.addEventListener('DOMContentLoaded', () => {
     initializePage();
@@ -995,6 +1213,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeThemeToggle();
     initializeDemoAIChat();
     enhanceFileUpload();
+    initializeKeyboardShortcuts();
     
     // Save button listeners
     document.getElementById('save-framework-btn')?.addEventListener('click', saveFramework);

@@ -117,23 +117,86 @@
 
                 <!-- Upload Files Tab -->
                 <div id="upload-tab" class="tab-content hidden">
-                    <div class="text-center py-12">
-                        <div class="mb-6">
-                            <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Upload your files</h3>
-                        <p class="text-gray-600 dark:text-gray-400 mb-6">Upload documents, images, or data to automatically populate framework sections</p>
-                        <div class="max-w-xl mx-auto">
+                    <div class="max-w-4xl mx-auto py-8">
+                        <!-- Drag and Drop Zone -->
+                        <div id="dropzone" class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-12 text-center transition-all duration-200 hover:border-primary-500 dark:hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/10 cursor-pointer">
+                            <div class="mb-4">
+                                <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Drag and drop files here</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">or click to browse your computer</p>
                             <label for="file-upload" class="cursor-pointer btn-primary inline-block">
                                 Choose Files
                                 <input id="file-upload" type="file" multiple class="hidden" accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png">
                             </label>
-                            <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Supported: PDF, DOC, DOCX, TXT, JPG, PNG</p>
+                            <p class="mt-4 text-sm text-gray-500 dark:text-gray-400">
+                                Supported: PDF, Word, Text, Images (max 10MB per file)
+                            </p>
                         </div>
-                        <div id="uploaded-files" class="mt-6 space-y-2 max-w-xl mx-auto hidden">
-                            <!-- Uploaded files will appear here -->
+
+                        <!-- Upload Progress -->
+                        <div id="upload-progress" class="hidden mt-6">
+                            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Uploading files...</span>
+                                    <span class="text-sm text-gray-500 dark:text-gray-400" id="upload-progress-text">0%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                    <div id="upload-progress-bar" class="bg-primary-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Uploaded Files List -->
+                        <div id="uploaded-files-section" class="hidden mt-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <h4 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                    Uploaded Files (<span id="files-count">0</span>)
+                                </h4>
+                                <button id="clear-files-btn" class="text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">
+                                    Clear All
+                                </button>
+                            </div>
+                            <div id="uploaded-files" class="space-y-3">
+                                <!-- Uploaded files will appear here -->
+                            </div>
+                        </div>
+
+                        <!-- AI Processing Section -->
+                        <div id="ai-processing-section" class="hidden mt-6">
+                            <div class="bg-gradient-to-r from-primary-50 to-blue-50 dark:from-primary-900/20 dark:to-blue-900/20 rounded-lg p-6 border border-primary-200 dark:border-primary-800">
+                                <div class="flex items-start space-x-4">
+                                    <div class="flex-shrink-0">
+                                        <svg class="w-8 h-8 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                                            🎯 AI Content Extraction
+                                        </h4>
+                                        <p class="text-sm text-gray-700 dark:text-gray-300 mb-4">
+                                            Want AI to analyze your files and automatically populate framework sections? This feature extracts relevant content from your documents.
+                                        </p>
+                                        <div class="flex space-x-3">
+                                            <button id="process-files-btn" class="btn-primary">
+                                                <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                                </svg>
+                                                Process with AI
+                                            </button>
+                                            <button id="manual-mode-btn" class="btn-secondary">
+                                                Manual Mode
+                                            </button>
+                                        </div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-3">
+                                            💡 Demo Mode: Real AI processing coming soon! For now, files will be stored for reference.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

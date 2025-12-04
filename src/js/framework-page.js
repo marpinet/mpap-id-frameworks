@@ -729,47 +729,262 @@ function generateDemoResponse(userMessage) {
 }
 
 // Demo file processing
+// ============================================================================
+// FILE UPLOAD & PROCESSING
+// ============================================================================
+
+let uploadedFiles = [];
+
 function enhanceFileUpload() {
     const fileInput = document.getElementById('file-upload');
+    const dropzone = document.getElementById('dropzone');
+    const uploadedFilesContainer = document.getElementById('uploaded-files');
+    const uploadedFilesSection = document.getElementById('uploaded-files-section');
+    const filesCount = document.getElementById('files-count');
+    const clearFilesBtn = document.getElementById('clear-files-btn');
+    const processFilesBtn = document.getElementById('process-files-btn');
+    const manualModeBtn = document.getElementById('manual-mode-btn');
+    const aiProcessingSection = document.getElementById('ai-processing-section');
     
-    fileInput?.addEventListener('change', async (e) => {
+    // File input change handler
+    fileInput?.addEventListener('change', (e) => {
         const files = Array.from(e.target.files);
-        if (files.length === 0) return;
+        if (files.length > 0) {
+            handleFiles(files);
+        }
+    });
+    
+    // Drag and drop handlers
+    dropzone?.addEventListener('click', () => {
+        fileInput?.click();
+    });
+    
+    dropzone?.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropzone.classList.add('border-primary-500', 'bg-primary-50', 'dark:bg-primary-900/10');
+    });
+    
+    dropzone?.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('border-primary-500', 'bg-primary-50', 'dark:bg-primary-900/10');
+    });
+    
+    dropzone?.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('border-primary-500', 'bg-primary-50', 'dark:bg-primary-900/10');
         
-        const uploadedFilesContainer = document.getElementById('uploaded-files');
-        uploadedFilesContainer.classList.remove('hidden');
+        const files = Array.from(e.dataTransfer.files);
+        if (files.length > 0) {
+            handleFiles(files);
+        }
+    });
+    
+    // Clear all files
+    clearFilesBtn?.addEventListener('click', () => {
+        uploadedFiles = [];
         uploadedFilesContainer.innerHTML = '';
+        uploadedFilesSection.classList.add('hidden');
+        aiProcessingSection.classList.add('hidden');
+        filesCount.textContent = '0';
+        fileInput.value = '';
+    });
+    
+    // Process files with AI
+    processFilesBtn?.addEventListener('click', async () => {
+        await processFilesWithAI();
+    });
+    
+    // Manual mode - just store files
+    manualModeBtn?.addEventListener('click', () => {
+        aiProcessingSection.classList.add('hidden');
+        showSuccess('Files stored for reference. You can continue filling the framework manually.');
+    });
+}
+
+/**
+ * Handle uploaded files
+ */
+async function handleFiles(files) {
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    const validFiles = [];
+    
+    // Validate files
+    for (const file of files) {
+        if (file.size > maxSize) {
+            showError(`${file.name} is too large (max 10MB)`);
+            continue;
+        }
+        validFiles.push(file);
+    }
+    
+    if (validFiles.length === 0) return;
+    
+    // Show upload progress
+    const progressSection = document.getElementById('upload-progress');
+    const progressBar = document.getElementById('upload-progress-bar');
+    const progressText = document.getElementById('upload-progress-text');
+    
+    progressSection.classList.remove('hidden');
+    
+    // Simulate upload progress
+    for (let i = 0; i <= 100; i += 10) {
+        progressBar.style.width = `${i}%`;
+        progressText.textContent = `${i}%`;
+        await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    
+    // Hide progress
+    setTimeout(() => {
+        progressSection.classList.add('hidden');
+    }, 500);
+    
+    // Add to uploaded files
+    validFiles.forEach(file => {
+        uploadedFiles.push({
+            file,
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            uploadedAt: new Date()
+        });
+    });
+    
+    // Render files
+    renderUploadedFiles();
+    
+    // Show AI processing section
+    document.getElementById('ai-processing-section').classList.remove('hidden');
+}
+
+/**
+ * Render uploaded files list
+ */
+function renderUploadedFiles() {
+    const container = document.getElementById('uploaded-files');
+    const section = document.getElementById('uploaded-files-section');
+    const count = document.getElementById('files-count');
+    
+    section.classList.remove('hidden');
+    count.textContent = uploadedFiles.length;
+    
+    container.innerHTML = uploadedFiles.map((fileData, index) => {
+        const icon = getFileIcon(fileData.type);
+        const sizeStr = formatFileSize(fileData.size);
         
-        files.forEach(async (file) => {
-            const fileEl = document.createElement('div');
-            fileEl.className = 'flex items-center justify-between p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700';
-            fileEl.innerHTML = `
-                <div class="flex items-center space-x-3">
-                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
-                    </svg>
-                    <div>
-                        <span class="text-sm text-gray-700 dark:text-gray-300">${file.name}</span>
-                        <p class="text-xs text-gray-500">Processing...</p>
+        return `
+            <div class="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-primary-500 dark:hover:border-primary-500 transition-all">
+                <div class="flex items-center space-x-4 flex-1">
+                    <div class="flex-shrink-0">
+                        ${icon}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium text-gray-900 dark:text-white truncate">${fileData.name}</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">${sizeStr} • Uploaded ${getTimeAgo(fileData.uploadedAt)}</p>
                     </div>
                 </div>
-                <span class="text-xs text-gray-500">${(file.size / 1024).toFixed(1)} KB</span>
-            `;
-            uploadedFilesContainer.appendChild(fileEl);
-            
-            // Simulate processing
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            
-            const statusEl = fileEl.querySelector('p');
-            statusEl.textContent = 'Processed (Demo)';
-            statusEl.classList.add('text-green-600');
+                <button class="remove-file-btn ml-4 text-gray-400 hover:text-red-500 transition-colors" data-index="${index}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                </button>
+            </div>
+        `;
+    }).join('');
+    
+    // Add remove button listeners
+    container.querySelectorAll('.remove-file-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const index = parseInt(btn.getAttribute('data-index'));
+            removeFile(index);
         });
-        
-        // Show demo message after processing
-        setTimeout(() => {
-            showSuccess('Files processed! In production, AI would analyze these and populate framework sections.');
-        }, 2500);
     });
+}
+
+/**
+ * Get file icon based on type
+ */
+function getFileIcon(type) {
+    if (type.includes('pdf')) {
+        return `<svg class="w-10 h-10 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M4 18h12V6h-4V2H4v16zm-2 1V0h12l4 4v16H2v-1z"/>
+        </svg>`;
+    } else if (type.includes('word') || type.includes('document')) {
+        return `<svg class="w-10 h-10 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M4 18h12V6h-4V2H4v16zm-2 1V0h12l4 4v16H2v-1z"/>
+        </svg>`;
+    } else if (type.includes('image')) {
+        return `<svg class="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+        </svg>`;
+    } else {
+        return `<svg class="w-10 h-10 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+        </svg>`;
+    }
+}
+
+/**
+ * Format file size
+ */
+function formatFileSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+}
+
+/**
+ * Get time ago string (reuse from earlier if needed)
+ */
+function getTimeAgo(date) {
+    const seconds = Math.floor((new Date() - date) / 1000);
+    if (seconds < 60) return 'just now';
+    if (seconds < 3600) return Math.floor(seconds / 60) + ' min ago';
+    if (seconds < 86400) return Math.floor(seconds / 3600) + ' hr ago';
+    return Math.floor(seconds / 86400) + ' days ago';
+}
+
+/**
+ * Remove a file
+ */
+function removeFile(index) {
+    uploadedFiles.splice(index, 1);
+    renderUploadedFiles();
+    
+    if (uploadedFiles.length === 0) {
+        document.getElementById('uploaded-files-section').classList.add('hidden');
+        document.getElementById('ai-processing-section').classList.add('hidden');
+    }
+}
+
+/**
+ * Process files with AI (Demo)
+ */
+async function processFilesWithAI() {
+    const btn = document.getElementById('process-files-btn');
+    const originalText = btn.innerHTML;
+    
+    // Show processing state
+    btn.disabled = true;
+    btn.innerHTML = `
+        <svg class="animate-spin w-5 h-5 inline-block mr-2" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        Processing...
+    `;
+    
+    // Simulate AI processing
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    
+    // Reset button
+    btn.disabled = false;
+    btn.innerHTML = originalText;
+    
+    // Show success message
+    showSuccess('✨ AI Processing Complete! (Demo Mode) In production, relevant content would be extracted and auto-populated into framework sections.');
+    
+    // Hide AI section
+    document.getElementById('ai-processing-section').classList.add('hidden');
 }
 
 // Initialize everything

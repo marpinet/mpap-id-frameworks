@@ -45,7 +45,7 @@ function updateDashboardStats(frameworks) {
   const total = frameworks.length;
   
   const statusCounts = frameworks.reduce((acc, framework) => {
-    const completion = calculateCompletion(framework.framework_data);
+    const completion = calculateCompletion(framework.content);
     const status = getProjectStatus(completion);
     acc[status] = (acc[status] || 0) + 1;
     return acc;
@@ -78,7 +78,7 @@ function renderRecentFrameworks(frameworks) {
   
   listContainer.innerHTML = recent.map(framework => {
     const definition = frameworkDefinitions[framework.framework_type] || {};
-    const completion = calculateCompletion(framework.framework_data);
+    const completion = calculateCompletion(framework.content);
     const status = getProjectStatus(completion);
     
     const statusColors = {

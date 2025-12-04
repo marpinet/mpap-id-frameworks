@@ -1,6 +1,7 @@
 {
   "name": "mpap-frameworks",
   "version": "1.0.0",
+  "type": "module",
   "description": "Interactive platform for design frameworks and sense-making processes",
   "main": "index.html",
   "scripts": {

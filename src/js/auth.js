@@ -31,11 +31,24 @@ export const modal = {
 export function updateAuthUI(user) {
     const authButtons = document.getElementById('auth-buttons');
     const userMenu = document.getElementById('user-menu');
+    const isDemoMode = localStorage.getItem('demoMode') === 'true';
     
-    if (user) {
-        // User is logged in
+    if (user || isDemoMode) {
+        // User is logged in or in demo mode
         authButtons?.classList.add('hidden');
         userMenu?.classList.remove('hidden');
+        
+        // Update profile button text for demo mode
+        if (isDemoMode && !user) {
+            const profileBtn = document.getElementById('profile-btn');
+            if (profileBtn) {
+                profileBtn.textContent = '🎭 Demo Mode';
+                profileBtn.onclick = (e) => {
+                    e.preventDefault();
+                    alert('Demo Mode Active\n\n✅ You can use all features\n💾 Your work saves locally\n🔄 Sign up to sync across devices');
+                };
+            }
+        }
     } else {
         // User is logged out
         authButtons?.classList.remove('hidden');
@@ -188,6 +201,16 @@ export async function handleSignup(event) {
 
 // Handle logout
 export async function handleLogout() {
+    const isDemoMode = localStorage.getItem('demoMode') === 'true';
+    
+    if (isDemoMode) {
+        // Exit demo mode
+        localStorage.removeItem('demoMode');
+        showSuccess('Exited Demo Mode');
+        window.location.reload();
+        return;
+    }
+    
     try {
         const { error } = await auth.signOut();
         
@@ -239,6 +262,13 @@ export async function handleForgotPassword(event) {
 
 // Initialize auth listeners
 export function initializeAuth() {
+    // Check for demo mode first
+    const isDemoMode = localStorage.getItem('demoMode') === 'true';
+    if (isDemoMode) {
+        updateAuthUI(null); // Will show demo mode UI
+        console.log('🎭 Demo Mode is active');
+    }
+    
     // Listen to auth state changes
     auth.onAuthStateChange((event, session) => {
         const user = session?.user || null;
@@ -329,4 +359,31 @@ export function initializeAuth() {
     // Forgot password form
     const forgotPasswordForm = document.getElementById('forgot-password-form');
     forgotPasswordForm?.addEventListener('submit', handleForgotPassword);
+    
+    // Demo Mode buttons
+    const demoModeLogin = document.getElementById('demo-mode-login');
+    demoModeLogin?.addEventListener('click', () => {
+        enableDemoMode();
+        modal.close('login-modal');
+    });
+    
+    const demoModeSignup = document.getElementById('demo-mode-signup');
+    demoModeSignup?.addEventListener('click', () => {
+        enableDemoMode();
+        modal.close('signup-modal');
+    });
+}
+
+// Enable demo/guest mode
+function enableDemoMode() {
+    // Set a flag in localStorage to indicate demo mode
+    localStorage.setItem('demoMode', 'true');
+    
+    // Show success message
+    showSuccess('🎭 Demo Mode activated! You can explore all features. Your work will be saved locally.');
+    
+    // Reload to update UI
+    setTimeout(() => {
+        window.location.reload();
+    }, 1500);
 }

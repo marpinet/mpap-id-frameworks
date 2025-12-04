@@ -415,15 +415,29 @@ async function loadSavedFramework() {
 
 // Save framework to database
 async function saveFramework() {
+    // Save current step data first
+    saveCurrentStepData();
+    
+    // If user is not logged in, save to localStorage only
     if (!currentUser) {
-        showError('Please log in to save your work');
+        saveToLocalStorage();
+        showSuccess('✅ Framework saved locally! Sign in to sync across devices.');
+        // Update last saved indicator
+        updateAutoSaveIndicator('saved');
         return;
     }
     
-    // Collect all section data
+    // Collect all section data from step-by-step mode
     currentFramework.sections.forEach(section => {
-        const textarea = document.getElementById(`section-${section.id}`);
-        if (textarea) {
+        // Try both step-by-step mode and traditional textarea selectors
+        const textarea = document.getElementById(`section-${section.id}`) || 
+                        document.getElementById('current-step-input');
+        if (textarea && currentStepIndex !== undefined) {
+            const currentSection = currentFramework.sections[currentStepIndex];
+            if (currentSection && currentSection.id === section.id) {
+                frameworkData[section.id] = textarea.value;
+            }
+        } else if (textarea) {
             frameworkData[section.id] = textarea.value;
         }
     });
@@ -452,15 +466,18 @@ async function saveFramework() {
             if (error) throw error;
         }
         
-        // Show success modal
-        modal.open('save-success-modal');
+        // Show success feedback
+        showSuccess('✅ Framework saved successfully!');
+        updateAutoSaveIndicator('saved');
         
-        // Clear localStorage
+        // Clear localStorage since it's now in database
         localStorage.removeItem(`framework-${frameworkId}`);
         
     } catch (error) {
         console.error('Error saving framework:', error);
-        showError('Failed to save framework: ' + error.message);
+        showError('Failed to save to database. Your work is saved locally.');
+        // Fallback to localStorage
+        saveToLocalStorage();
     }
 }
 
@@ -1411,10 +1428,10 @@ function previousStep() {
 document.addEventListener('DOMContentLoaded', () => {
     initializePage();
     initializeTabs();
-    initializeFileUpload();
+    // initializeFileUpload(); // OLD - replaced by enhanceFileUpload
     initializeThemeToggle();
     initializeDemoAIChat();
-    enhanceFileUpload();
+    enhanceFileUpload(); // NEW enhanced file upload with AI processing demo
     initializeKeyboardShortcuts();
     initializeVisualModes();
     

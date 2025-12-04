@@ -1,6 +1,7 @@
 // Import Supabase and Auth
 import { supabase, auth } from './supabase.js';
 import { initializeAuth } from './auth.js';
+import { getFramework } from './frameworks.js';
 
 // Test Supabase connection on page load
 (async () => {
@@ -163,7 +164,7 @@ async function loadRecentFrameworks() {
     try {
         // Fetch user's frameworks
         const { data: frameworks, error } = await supabase
-            .from('user_frameworks')
+            .from('frameworks')
             .select('*')
             .eq('user_id', user.id)
             .order('updated_at', { ascending: false })
@@ -184,7 +185,7 @@ async function loadRecentFrameworks() {
         const frameworkCounts = {};
         
         frameworks.forEach(fw => {
-            const completion = calculateCompletion(fw.framework_data);
+            const completion = calculateCompletion(fw.content);
             if (completion === 0) {
                 // draft - don't count
             } else if (completion === 100) {
@@ -218,7 +219,7 @@ async function loadRecentFrameworks() {
         emptyState?.classList.add('hidden');
         grid.innerHTML = frameworks.slice(0, 4).map(fw => {
             const fwData = getFrameworkData(fw.framework_type);
-            const completion = calculateCompletion(fw.framework_data);
+            const completion = calculateCompletion(fw.content);
             const timeAgo = getTimeAgo(new Date(fw.updated_at));
             
             return `
@@ -271,6 +272,13 @@ function calculateCompletion(frameworkData) {
  * Get framework data by ID
  */
 function getFrameworkData(frameworkId) {
+    // Use the imported getFramework function from frameworks.js
+    const fwDefinition = getFramework(frameworkId);
+    if (fwDefinition) {
+        return { name: fwDefinition.name, icon: fwDefinition.icon };
+    }
+    
+    // Fallback to local search if not found
     const allFrameworks = frameworkCategories.flatMap(cat => cat.frameworks);
     const fw = allFrameworks.find(f => f.slug === frameworkId);
     if (fw) {

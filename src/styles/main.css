@@ -62,4 +62,55 @@
       transform: scale(1);
     }
   }
+
+  /* AI Chat Quick Actions */
+  .quick-actions-grid {
+    @apply grid grid-cols-2 gap-2 mt-3;
+  }
+
+  .quick-action-btn {
+    @apply flex items-center gap-2 px-4 py-3 rounded-lg font-medium transition-all duration-200;
+    @apply bg-gradient-to-r from-primary-400 to-primary-500 hover:from-primary-500 hover:to-primary-600;
+    @apply text-navy-900 shadow-sm hover:shadow-md;
+    @apply transform hover:scale-105 active:scale-95;
+  }
+
+  .quick-action-btn .action-emoji {
+    @apply text-lg;
+  }
+
+  .quick-action-btn .action-text {
+    @apply text-sm font-semibold;
+  }
+
+  /* Typing Indicator */
+  .typing-indicator {
+    @apply flex gap-1 items-center px-4 py-3;
+  }
+
+  .typing-indicator span {
+    @apply w-2 h-2 bg-navy-400 dark:bg-cream-400 rounded-full;
+    animation: typingBounce 1.4s infinite ease-in-out;
+  }
+
+  .typing-indicator span:nth-child(1) {
+    animation-delay: 0s;
+  }
+
+  .typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  .typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+
+  @keyframes typingBounce {
+    0%, 60%, 100% {
+      transform: translateY(0);
+    }
+    30% {
+      transform: translateY(-8px);
+    }
+  }
 }

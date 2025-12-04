@@ -556,30 +556,8 @@ function initializeDemoAIChat() {
         comingSoon.remove();
     }
     
-    // Add initial AI greeting message
-    const greetingMsg = document.createElement('div');
-    greetingMsg.className = 'flex justify-start';
-    greetingMsg.innerHTML = `
-        <div class="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg px-4 py-3 max-w-[85%]">
-            <p class="font-semibold mb-2">👋 Hello! I'm your AI assistant for the ${currentFramework?.name || 'framework'}.</p>
-            <p class="mb-3">I'm here to help you complete this framework step by step. Here's what I can do for you:</p>
-            <ul class="list-disc list-inside space-y-1 mb-3 text-sm">
-                <li><strong>Provide examples</strong> for each section</li>
-                <li><strong>Research information</strong> relevant to your project</li>
-                <li><strong>Suggest content</strong> based on best practices</li>
-                <li><strong>Answer questions</strong> about the framework</li>
-            </ul>
-            <p class="font-semibold">To get started, try asking:</p>
-            <ul class="list-none space-y-1 text-sm mt-2">
-                <li>• "Can you give me an example for the first section?"</li>
-                <li>• "Help me understand what this framework is for"</li>
-                <li>• "What should I include in the [section name]?"</li>
-            </ul>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mt-3 italic">Note: This is a demo version. Full AI integration coming soon!</p>
-        </div>
-    `;
-    chatMessages.appendChild(greetingMsg);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+    // Add step-aware greeting with quick actions
+    initiateStepConversation(chatMessages);
     
     const sendMessage = async () => {
         const message = chatInput.value.trim();
@@ -819,3 +797,219 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+// ============================================================================
+// STEP-AWARE AI CHAT FUNCTIONS
+// ============================================================================
+
+/**
+ * Initiate a conversation based on the current step
+ */
+function initiateStepConversation(chatMessages) {
+  const currentSection = frameworkSteps[currentStepIndex];
+  const sectionId = currentSection?.id;
+  const sectionData = frameworkData[sectionId];
+  const isEmpty = !sectionData || sectionData.trim() === '';
+
+  let greeting, buttons;
+
+  if (isEmpty) {
+    // Section is empty - offer help to get started
+    greeting = `👋 Let's work on <strong>${currentSection.name}</strong>! I can help you get started with examples, a guided walkthrough, tips, or answer any questions.`;
+    buttons = [
+      { action: 'example', emoji: '📝', text: 'Show Example' },
+      { action: 'guide', emoji: '🗺️', text: 'Guide Me' },
+      { action: 'tips', emoji: '💡', text: 'Give Tips' },
+      { action: 'questions', emoji: '❓', text: 'Ask Questions' }
+    ];
+  } else {
+    // Section has content - offer enhancement options
+    greeting = `Great work on <strong>${currentSection.name}</strong>! 👏 Want me to review what you have, expand on it, suggest improvements, or help with the next section?`;
+    buttons = [
+      { action: 'review', emoji: '🔍', text: 'Review This' },
+      { action: 'expand', emoji: '📈', text: 'Expand Ideas' },
+      { action: 'improve', emoji: '✨', text: 'Improve It' },
+      { action: 'next', emoji: '➡️', text: 'Next Section' }
+    ];
+  }
+
+  // Add greeting message
+  addChatMessage(greeting, 'ai');
+
+  // Add quick action buttons
+  const buttonsHtml = `
+    <div class="quick-actions-grid">
+      ${buttons.map(btn => `
+        <button class="quick-action-btn" data-action="${btn.action}">
+          <span class="action-emoji">${btn.emoji}</span>
+          <span class="action-text">${btn.text}</span>
+        </button>
+      `).join('')}
+    </div>
+  `;
+
+  const buttonContainer = document.createElement('div');
+  buttonContainer.className = 'chat-message ai-message';
+  buttonContainer.innerHTML = buttonsHtml;
+  chatMessages.appendChild(buttonContainer);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+
+  // Attach event listeners to buttons
+  buttonContainer.querySelectorAll('.quick-action-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const action = btn.getAttribute('data-action');
+      handleQuickAction(action, currentSection);
+    });
+  });
+}
+
+/**
+ * Add a chat message to the UI
+ */
+function addChatMessage(content, type = 'user') {
+  const chatMessages = document.getElementById('chat-messages');
+  const messageDiv = document.createElement('div');
+  messageDiv.className = `chat-message ${type}-message`;
+  messageDiv.innerHTML = content;
+  chatMessages.appendChild(messageDiv);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+/**
+ * Show typing indicator
+ */
+function showTypingIndicator() {
+  const chatMessages = document.getElementById('chat-messages');
+  const typingDiv = document.createElement('div');
+  typingDiv.className = 'chat-message ai-message typing-indicator';
+  typingDiv.id = 'typing-indicator';
+  typingDiv.innerHTML = '<span></span><span></span><span></span>';
+  chatMessages.appendChild(typingDiv);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+/**
+ * Remove typing indicator
+ */
+function removeTypingIndicator() {
+  const indicator = document.getElementById('typing-indicator');
+  if (indicator) {
+    indicator.remove();
+  }
+}
+
+/**
+ * Handle quick action button click
+ */
+async function handleQuickAction(action, section) {
+  // Show user's choice
+  const actionText = getActionText(action);
+  const actionEmoji = getActionEmoji(action);
+  addChatMessage(`${actionEmoji} ${actionText}`, 'user');
+
+  // Show typing indicator
+  showTypingIndicator();
+
+  // Simulate AI thinking delay
+  await new Promise(resolve => setTimeout(resolve, 1000));
+
+  // Remove typing indicator
+  removeTypingIndicator();
+
+  // Generate and show response
+  const response = generateActionResponse(action, section);
+  addChatMessage(response, 'ai');
+}
+
+/**
+ * Get display text for action
+ */
+function getActionText(action) {
+  const texts = {
+    example: 'Show me an example',
+    guide: 'Guide me through this',
+    tips: 'Give me some tips',
+    questions: 'I have questions',
+    review: 'Review what I have',
+    expand: 'Help me expand these ideas',
+    improve: 'Suggest improvements',
+    next: 'Move to next section'
+  };
+  return texts[action] || action;
+}
+
+/**
+ * Get emoji for action
+ */
+function getActionEmoji(action) {
+  const emojis = {
+    example: '📝',
+    guide: '🗺️',
+    tips: '💡',
+    questions: '❓',
+    review: '🔍',
+    expand: '📈',
+    improve: '✨',
+    next: '➡️'
+  };
+  return emojis[action] || '💬';
+}
+
+/**
+ * Generate contextual response based on action and current section
+ */
+function generateActionResponse(action, section) {
+  const sectionName = section.name;
+  const sectionId = section.id;
+
+  // Response templates organized by action type
+  const responses = {
+    example: {
+      'vision-statement': `Here's a compelling vision statement example:<br><br><strong>"To become the world's leading sustainable transportation company, making clean mobility accessible to everyone by 2030."</strong><br><br>Notice how it:<br>• States a clear ambition ("world's leading")<br>• Includes a time horizon (2030)<br>• Defines the impact (accessible to everyone)<br>• Is inspiring yet achievable`,
+      
+      'target-market': `Let me show you a well-defined target market:<br><br><strong>Primary Segment:</strong><br>• Urban professionals, 25-40 years old<br>• Income: $75K-150K annually<br>• Tech-savvy early adopters<br>• Value convenience and sustainability<br>• Located in major metropolitan areas<br><br>See how it's specific about demographics, psychographics, and geography? Try applying this structure to your audience.`,
+      
+      'default': `Here's an example for <strong>${sectionName}</strong>:<br><br>Consider a project similar to yours. The key is to be specific, actionable, and aligned with your overall strategy. Would you like me to tailor an example more specifically to your project?`
+    },
+
+    guide: {
+      'vision-statement': `Let's build your vision statement step-by-step:<br><br><strong>Step 1:</strong> What transformation do you want to create? (Think big picture)<br><br><strong>Step 2:</strong> Who benefits from this transformation?<br><br><strong>Step 3:</strong> When do you aim to achieve this?<br><br><strong>Step 4:</strong> Combine these into one inspiring sentence.<br><br>Start with Step 1 - what transformation are you aiming for?`,
+      
+      'target-market': `I'll guide you through defining your target market:<br><br><strong>Step 1:</strong> Demographics - Who are they? (age, income, location)<br><br><strong>Step 2:</strong> Psychographics - What do they value? (beliefs, behaviors, priorities)<br><br><strong>Step 3:</strong> Pain Points - What problems do they face?<br><br><strong>Step 4:</strong> Buying Behavior - How do they make decisions?<br><br>Let's start with demographics. Describe your typical customer.`,
+      
+      'default': `Let's work through <strong>${sectionName}</strong> together:<br><br>1️⃣ First, gather all relevant information<br>2️⃣ Next, organize it into key themes<br>3️⃣ Then, prioritize what's most important<br>4️⃣ Finally, document it clearly<br><br>Which step would you like to start with?`
+    },
+
+    tips: {
+      'vision-statement': `💡 <strong>Pro Tips for Vision Statements:</strong><br><br>✓ Keep it concise (1-2 sentences max)<br>✓ Make it aspirational but believable<br>✓ Avoid jargon and buzzwords<br>✓ Focus on impact, not tactics<br>✓ Test it: Would it inspire your team?<br><br>Common mistake: Being too vague ("be the best"). Be specific about what "best" means for you.`,
+      
+      'target-market': `💡 <strong>Target Market Best Practices:</strong><br><br>✓ Be specific over broad (niche > everyone)<br>✓ Use real data when possible<br>✓ Consider multiple segments<br>✓ Identify the most valuable segment first<br>✓ Think about access and reach<br><br>Remember: Trying to serve everyone often means serving no one well.`,
+      
+      'default': `💡 <strong>Tips for ${sectionName}:</strong><br><br>✓ Be specific and concrete<br>✓ Use data to support claims<br>✓ Think from user perspective<br>✓ Align with your overall strategy<br>✓ Keep it actionable<br><br>Quality over quantity - it's better to have a few strong insights than many weak ones.`
+    },
+
+    questions: {
+      'default': `I'm here to help! Common questions about <strong>${sectionName}</strong>:<br><br>• How detailed should this be?<br>• What format works best?<br>• How does this connect to other sections?<br>• What if I'm not sure about something?<br><br>What specific question do you have?`
+    },
+
+    review: {
+      'default': `I'd be happy to review your <strong>${sectionName}</strong>! 🔍<br><br>I'll look at:<br>• Clarity and completeness<br>• Alignment with your goals<br>• Actionability<br>• Potential gaps or improvements<br><br>To give you the best feedback, could you share what specific aspect you'd like me to focus on?`
+    },
+
+    expand: {
+      'default': `Great! Let's expand on your <strong>${sectionName}</strong>. 📈<br><br>I can help you:<br>• Add more depth and detail<br>• Explore implications<br>• Identify related opportunities<br>• Connect to other frameworks<br><br>Which direction interests you most?`
+    },
+
+    improve: {
+      'default': `Let's refine your <strong>${sectionName}</strong>! ✨<br><br>Areas we can improve:<br>• Clarity and precision<br>• Strategic alignment<br>• Measurability<br>• Feasibility<br><br>I'll need to see what you have. Could you paste the key points you want to improve?`
+    },
+
+    next: {
+      'default': `Ready to move forward? ➡️<br><br>Before we go to the next section, let's make sure you've covered the essentials here:<br><br>✓ Key points documented<br>✓ Specific and actionable<br>✓ Aligned with your goals<br><br>Feeling good about <strong>${sectionName}</strong>? Click the Next button below to continue, or let me know if you want to refine anything first.`
+    }
+  };
+
+  // Get section-specific response or default
+  const actionResponses = responses[action] || {};
+  return actionResponses[sectionId] || actionResponses['default'] || `I'm here to help with ${sectionName}. What would you like to know?`;
+}

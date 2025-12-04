@@ -6,6 +6,151 @@ let currentUser = null;
 let allFrameworks = [];
 let frameworkToDelete = null;
 
+// ============================================================================
+// DASHBOARD STATS & RECENT FRAMEWORKS
+// ============================================================================
+
+/**
+ * Calculate completion percentage for a framework
+ */
+function calculateCompletion(frameworkData) {
+  if (!frameworkData || typeof frameworkData !== 'object') return 0;
+  
+  const sections = Object.keys(frameworkData).filter(key => 
+    !key.startsWith('_') && typeof frameworkData[key] === 'string'
+  );
+  
+  if (sections.length === 0) return 0;
+  
+  const filledSections = sections.filter(key => 
+    frameworkData[key] && frameworkData[key].trim().length > 0
+  );
+  
+  return Math.round((filledSections.length / sections.length) * 100);
+}
+
+/**
+ * Determine project status based on completion
+ */
+function getProjectStatus(completion) {
+  if (completion === 0) return 'draft';
+  if (completion === 100) return 'completed';
+  return 'in-progress';
+}
+
+/**
+ * Update dashboard statistics
+ */
+function updateDashboardStats(frameworks) {
+  const total = frameworks.length;
+  
+  const statusCounts = frameworks.reduce((acc, framework) => {
+    const completion = calculateCompletion(framework.framework_data);
+    const status = getProjectStatus(completion);
+    acc[status] = (acc[status] || 0) + 1;
+    return acc;
+  }, { draft: 0, 'in-progress': 0, completed: 0 });
+  
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-inprogress').textContent = statusCounts['in-progress'] || 0;
+  document.getElementById('stat-completed').textContent = statusCounts.completed || 0;
+}
+
+/**
+ * Render recently accessed frameworks
+ */
+function renderRecentFrameworks(frameworks) {
+  const listContainer = document.getElementById('recent-frameworks-list');
+  const emptyState = document.getElementById('recent-empty-state');
+  
+  if (!frameworks || frameworks.length === 0) {
+    listContainer.innerHTML = '';
+    emptyState.classList.remove('hidden');
+    return;
+  }
+  
+  emptyState.classList.add('hidden');
+  
+  // Sort by updated_at and take top 5
+  const recent = [...frameworks]
+    .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
+    .slice(0, 5);
+  
+  listContainer.innerHTML = recent.map(framework => {
+    const definition = frameworkDefinitions[framework.framework_type] || {};
+    const completion = calculateCompletion(framework.framework_data);
+    const status = getProjectStatus(completion);
+    
+    const statusColors = {
+      'draft': 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300',
+      'in-progress': 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300',
+      'completed': 'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300'
+    };
+    
+    const statusLabels = {
+      'draft': 'Draft',
+      'in-progress': 'In Progress',
+      'completed': 'Completed'
+    };
+    
+    const timeAgo = getTimeAgo(new Date(framework.updated_at));
+    
+    return `
+      <a href="/framework.html?id=${framework.framework_type}&project=${framework.id}" 
+         class="block p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-primary-500 dark:hover:border-primary-500 hover:shadow-md transition-all">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-3 flex-1">
+            <span class="text-2xl">${definition.icon || '📋'}</span>
+            <div class="flex-1 min-w-0">
+              <h4 class="text-sm font-semibold text-gray-900 dark:text-white truncate">${framework.title}</h4>
+              <p class="text-xs text-gray-600 dark:text-gray-400">${definition.name || 'Framework'}</p>
+            </div>
+          </div>
+          <div class="flex items-center space-x-3 ml-4">
+            <span class="text-xs px-2 py-1 rounded-full ${statusColors[status]}">
+              ${statusLabels[status]}
+            </span>
+            <div class="text-right">
+              <div class="text-xs font-medium text-gray-900 dark:text-white">${completion}%</div>
+              <div class="text-xs text-gray-500 dark:text-gray-500">${timeAgo}</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Progress bar -->
+        <div class="mt-3 w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+          <div class="bg-primary-500 h-1.5 rounded-full transition-all" style="width: ${completion}%"></div>
+        </div>
+      </a>
+    `;
+  }).join('');
+}
+
+/**
+ * Get human-readable time ago string
+ */
+function getTimeAgo(date) {
+  const seconds = Math.floor((new Date() - date) / 1000);
+  
+  const intervals = {
+    year: 31536000,
+    month: 2592000,
+    week: 604800,
+    day: 86400,
+    hour: 3600,
+    minute: 60
+  };
+  
+  for (const [name, secondsInInterval] of Object.entries(intervals)) {
+    const interval = Math.floor(seconds / secondsInInterval);
+    if (interval >= 1) {
+      return interval === 1 ? `1 ${name} ago` : `${interval} ${name}s ago`;
+    }
+  }
+  
+  return 'just now';
+}
+
 // Initialize page
 async function initializePage() {
     // Initialize auth
@@ -80,13 +225,21 @@ async function loadFrameworks() {
         // Update count
         document.getElementById('framework-count').textContent = allFrameworks.length;
         
-        // Render frameworks
+        // Update dashboard stats
+        updateDashboardStats(allFrameworks);
+        
+        // Render recently accessed frameworks
+        renderRecentFrameworks(allFrameworks);
+        
+        // Render all frameworks
         renderFrameworks(allFrameworks);
         
     } catch (error) {
         console.error('Error loading frameworks:', error);
         showError('Failed to load frameworks');
         renderFrameworks([]);
+        updateDashboardStats([]);
+        renderRecentFrameworks([]);
     }
 }
 
@@ -194,6 +347,8 @@ async function deleteFramework() {
         
         // Update count and re-render
         document.getElementById('framework-count').textContent = allFrameworks.length;
+        updateDashboardStats(allFrameworks);
+        renderRecentFrameworks(allFrameworks);
         filterAndSortFrameworks();
         
     } catch (error) {

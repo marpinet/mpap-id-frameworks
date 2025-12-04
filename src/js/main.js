@@ -54,7 +54,8 @@ const frameworkCategories = [
         frameworks: [
             { name: "Project Charter", slug: "project-charter" },
             { name: "Project Brief", slug: "project-brief" },
-            { name: "Canvas Business Plan", slug: "canvas-business-plan" }
+            { name: "Canvas Business Plan", slug: "canvas-business-plan" },
+            { name: "Company Background", slug: "company-background" }
         ]
     },
     {
@@ -64,7 +65,8 @@ const frameworkCategories = [
         frameworks: [
             { name: "Resource-Based Analysis", slug: "resource-based-analysis" },
             { name: "System Mapping", slug: "system-mapping" },
-            { name: "Market Segmentation", slug: "market-segmentation" }
+            { name: "Market Segmentation", slug: "market-segmentation" },
+            { name: "Competitor Mapping", slug: "competitor-mapping" }
         ]
     },
     {
@@ -83,7 +85,7 @@ const frameworkCategories = [
         color: "orange",
         frameworks: [
             { name: "Journey Mapping", slug: "journey-mapping" },
-            { name: "Translating Themes to Opportunity Spaces", slug: "translating-themes" }
+            { name: "Translating Themes to Opportunity Spaces", slug: "translating-themes-to-opportunity-spaces" }
         ]
     },
     {
@@ -93,7 +95,7 @@ const frameworkCategories = [
         frameworks: [
             { name: "Strategic Purpose", slug: "strategic-purpose" },
             { name: "Strategic Roadmap", slug: "strategic-roadmap" },
-            { name: "Leverage Points and Interventions", slug: "leverage-points" }
+            { name: "Leverage Points and Interventions", slug: "leverage-points-and-interventions" }
         ]
     }
 ];

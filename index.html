@@ -20,31 +20,31 @@
 </head>
 <body class="min-h-screen">
     <!-- Navigation -->
-    <nav class="bg-cream-50 dark:bg-navy-900 shadow-sm border-b border-navy-200 dark:border-navy-700 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav class="bg-white/90 dark:bg-navy-800/90 backdrop-blur-lg shadow-sm border-b border-navy-200/50 dark:border-navy-700/50 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto container-padding">
             <div class="flex justify-between items-center h-16">
                 <!-- Logo -->
                 <div class="flex items-center">
-                    <a href="/" class="text-2xl font-bold font-display text-navy-900 dark:text-primary-400">
+                    <a href="/" class="text-2xl font-bold font-display text-navy-900 dark:text-primary-400 hover:text-primary-600 dark:hover:text-primary-300 transition-all duration-200 hover:scale-105">
                         MPAP Frameworks
                     </a>
                 </div>
                 
                 <!-- Desktop Navigation -->
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="/" class="text-navy-700 dark:text-cream-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors font-medium">
+                <div class="hidden md:flex items-center space-x-1">
+                    <a href="/" class="px-4 py-2 rounded-lg text-navy-700 dark:text-cream-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-navy-700 transition-all duration-200 font-medium">
                         Home
                     </a>
-                    <a href="#frameworks" class="text-navy-700 dark:text-cream-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors font-medium">
+                    <a href="#frameworks" class="px-4 py-2 rounded-lg text-navy-700 dark:text-cream-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-navy-700 transition-all duration-200 font-medium">
                         Frameworks
                     </a>
-                    <a href="/projects.html" id="projects-nav-link" class="hidden text-navy-700 dark:text-cream-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors font-medium">
+                    <a href="/projects.html" id="projects-nav-link" class="hidden px-4 py-2 rounded-lg text-navy-700 dark:text-cream-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-navy-700 transition-all duration-200 font-medium">
                         My Projects
                     </a>
-                    <a href="#about" class="text-navy-700 dark:text-cream-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors font-medium">
+                    <a href="#about" class="px-4 py-2 rounded-lg text-navy-700 dark:text-cream-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-navy-700 transition-all duration-200 font-medium">
                         About
                     </a>
-                    <button id="theme-toggle" class="p-2 rounded-lg hover:bg-cream-200 dark:hover:bg-navy-700 transition-colors" aria-label="Toggle theme">
+                    <button id="theme-toggle" class="ml-2 p-2 rounded-lg hover:bg-primary-50 dark:hover:bg-navy-700 transition-all duration-200" aria-label="Toggle theme">
                         <svg class="w-5 h-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/>
                         </svg>
@@ -86,14 +86,14 @@
     </nav>
 
     <!-- Hero Section -->
-    <section class="bg-gradient-to-br from-primary-100 via-cream-100 to-primary-50 dark:from-navy-800 dark:to-navy-900 py-24 md:py-32 relative overflow-hidden">
+    <section class="bg-gradient-to-br from-primary-100 via-cream-100 to-primary-50 dark:from-navy-800 dark:to-navy-900 section-spacing relative overflow-hidden">
         <!-- Decorative elements -->
         <div class="absolute inset-0 opacity-10">
-            <div class="absolute top-10 left-10 w-32 h-32 bg-primary-600 rounded-full blur-3xl"></div>
-            <div class="absolute bottom-10 right-10 w-48 h-48 bg-navy-900 rounded-full blur-3xl"></div>
+            <div class="absolute top-10 left-10 w-32 h-32 bg-primary-600 rounded-full blur-3xl animate-pulse-subtle"></div>
+            <div class="absolute bottom-10 right-10 w-48 h-48 bg-navy-900 rounded-full blur-3xl animate-pulse-subtle" style="animation-delay: 1s;"></div>
         </div>
         
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="max-w-7xl mx-auto container-padding relative z-10">
             <div class="text-center">
                 <!-- Badge -->
                 <div class="inline-flex items-center px-4 py-2 bg-white dark:bg-navy-700 rounded-full shadow-md mb-6">
@@ -162,22 +162,25 @@
     </section>
 
     <!-- Recently Accessed Section (for logged-in users) -->
-    <section id="recent-frameworks-section" class="hidden py-16 bg-white dark:bg-navy-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between mb-8">
+    <section id="recent-frameworks-section" class="hidden section-spacing-sm bg-white dark:bg-navy-800">
+        <div class="max-w-7xl mx-auto container-padding">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-10 gap-4">
                 <div>
-                    <h2 class="text-3xl font-bold font-display text-navy-900 dark:text-cream-50 mb-2">
+                    <h2 class="text-3xl md:text-4xl font-bold font-display text-navy-900 dark:text-cream-50 mb-2">
                         Continue Where You Left Off
                     </h2>
                     <p class="text-navy-600 dark:text-cream-400">Your recently accessed frameworks</p>
                 </div>
-                <a href="/projects.html" class="text-primary-600 dark:text-primary-400 hover:underline font-medium">
-                    View all projects →
+                <a href="/projects.html" class="px-5 py-2.5 rounded-lg text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-navy-700 font-medium transition-all duration-200 flex items-center gap-2">
+                    View all projects
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
                 </a>
             </div>
             
             <!-- Recent Frameworks Grid -->
-            <div id="recent-frameworks-grid" class="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div id="recent-frameworks-grid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Loading state -->
                 <div class="col-span-full text-center py-8">
                     <div class="animate-pulse text-gray-400 dark:text-gray-600">Loading...</div>
@@ -196,45 +199,46 @@
     </section>
 
     <!-- Quick Stats Section (for logged-in users) -->
-    <section id="quick-stats-section" class="hidden py-16 bg-gradient-to-br from-primary-50 to-cream-100 dark:from-navy-900 dark:to-navy-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+    <section id="quick-stats-section" class="hidden section-spacing-sm bg-gradient-to-br from-primary-50 to-cream-100 dark:from-navy-900 dark:to-navy-800">
+        <div class="max-w-7xl mx-auto container-padding">
+            <h2 class="text-2xl md:text-3xl font-bold font-display text-navy-900 dark:text-cream-50 mb-8">Your Progress</h2>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Total Projects -->
-                <div class="bg-white dark:bg-navy-700 rounded-xl shadow-md p-6 text-center">
-                    <div class="text-3xl font-bold text-primary-600 dark:text-primary-400 mb-2" id="stat-home-total">0</div>
-                    <div class="text-sm text-gray-600 dark:text-gray-400">Total Projects</div>
+                <div class="bg-white dark:bg-navy-700 rounded-xl shadow-md hover:shadow-xl p-6 text-center transition-all duration-300 hover:-translate-y-1">
+                    <div class="text-4xl md:text-5xl font-bold text-primary-600 dark:text-primary-400 mb-3" id="stat-home-total">0</div>
+                    <div class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Projects</div>
                 </div>
                 
                 <!-- In Progress -->
-                <div class="bg-white dark:bg-navy-700 rounded-xl shadow-md p-6 text-center">
-                    <div class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2" id="stat-home-progress">0</div>
-                    <div class="text-sm text-gray-600 dark:text-gray-400">In Progress</div>
+                <div class="bg-white dark:bg-navy-700 rounded-xl shadow-md hover:shadow-xl p-6 text-center transition-all duration-300 hover:-translate-y-1">
+                    <div class="text-4xl md:text-5xl font-bold text-blue-600 dark:text-blue-400 mb-3" id="stat-home-progress">0</div>
+                    <div class="text-sm font-medium text-gray-600 dark:text-gray-400">In Progress</div>
                 </div>
                 
                 <!-- Completed -->
-                <div class="bg-white dark:bg-navy-700 rounded-xl shadow-md p-6 text-center">
-                    <div class="text-3xl font-bold text-green-600 dark:text-green-400 mb-2" id="stat-home-completed">0</div>
-                    <div class="text-sm text-gray-600 dark:text-gray-400">Completed</div>
+                <div class="bg-white dark:bg-navy-700 rounded-xl shadow-md hover:shadow-xl p-6 text-center transition-all duration-300 hover:-translate-y-1">
+                    <div class="text-4xl md:text-5xl font-bold text-green-600 dark:text-green-400 mb-3" id="stat-home-completed">0</div>
+                    <div class="text-sm font-medium text-gray-600 dark:text-gray-400">Completed</div>
                 </div>
                 
                 <!-- Most Used -->
-                <div class="bg-white dark:bg-navy-700 rounded-xl shadow-md p-6 text-center">
-                    <div class="text-3xl mb-2" id="stat-home-favorite">📊</div>
-                    <div class="text-sm text-gray-600 dark:text-gray-400">Most Used</div>
+                <div class="bg-white dark:bg-navy-700 rounded-xl shadow-md hover:shadow-xl p-6 text-center transition-all duration-300 hover:-translate-y-1">
+                    <div class="text-4xl md:text-5xl mb-3" id="stat-home-favorite">📊</div>
+                    <div class="text-sm font-medium text-gray-600 dark:text-gray-400">Most Used</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Features Section -->
-    <section id="about" class="py-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="about" class="section-spacing bg-cream-50 dark:bg-navy-900">
+        <div class="max-w-7xl mx-auto container-padding">
             <div class="text-center mb-16">
                 <h2 class="section-title">Three Ways to Work</h2>
                 <p class="section-subtitle">Choose the interaction method that works best for your team</p>
             </div>
             
-            <div class="grid md:grid-cols-3 gap-8">
+            <div class="grid md:grid-cols-3 gap-8 lg:gap-10">
                 <!-- Upload Files -->
                 <div class="card">
                     <div class="w-12 h-12 bg-primary-200 dark:bg-primary-900 rounded-lg flex items-center justify-center mb-4">
@@ -278,68 +282,68 @@
     </section>
 
     <!-- Framework Categories Section -->
-    <section id="frameworks" class="py-20 bg-white dark:bg-navy-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="frameworks" class="section-spacing bg-white dark:bg-navy-800">
+        <div class="max-w-7xl mx-auto container-padding">
             <div class="text-center mb-16">
                 <h2 class="section-title">Framework Categories</h2>
                 <p class="section-subtitle">Navigate through five stages of the design process</p>
             </div>
             
-            <div class="space-y-6" id="framework-categories">
+            <div class="space-y-8" id="framework-categories">
                 <!-- Categories will be populated by JavaScript -->
             </div>
         </div>
     </section>
 
     <!-- CTA Section -->
-    <section class="py-20">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <section class="section-spacing bg-gradient-to-br from-primary-50 to-cream-100 dark:from-navy-900 dark:to-navy-800">
+        <div class="max-w-4xl mx-auto container-padding text-center">
             <h2 class="section-title">Ready to Get Started?</h2>
             <p class="section-subtitle">
                 Create an account to save your work, collaborate with your team, and access all frameworks.
             </p>
-            <button id="cta-signup-btn" class="btn-primary text-lg">
+            <button id="cta-signup-btn" class="btn-primary text-lg px-10 py-5 text-lg shadow-lg hover:shadow-xl">
                 Sign Up Free
             </button>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-navy-900 text-cream-300 py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid md:grid-cols-4 gap-8">
+    <footer class="bg-navy-900 text-cream-300 section-spacing border-t border-navy-800">
+        <div class="max-w-7xl mx-auto container-padding">
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
                 <div>
-                    <h3 class="text-cream-50 text-lg font-bold font-display mb-4">MPAP Frameworks</h3>
-                    <p class="text-sm">
+                    <h3 class="text-cream-50 text-xl font-bold font-display mb-4">MPAP Frameworks</h3>
+                    <p class="text-sm leading-relaxed text-cream-400">
                         Structured sense-making for design teams, inspired by Vijay Kumar's 101 Design Methods.
                     </p>
                 </div>
                 <div>
-                    <h4 class="text-cream-50 font-bold mb-4">Product</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#frameworks" class="hover:text-primary-400 transition-colors">Frameworks</a></li>
-                        <li><a href="#about" class="hover:text-primary-400 transition-colors">About</a></li>
-                        <li><a href="/" class="hover:text-primary-400 transition-colors">Home</a></li>
+                    <h4 class="text-cream-50 font-bold mb-4 text-lg">Product</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#frameworks" class="link-animated hover:text-primary-400 transition-colors inline-block">Frameworks</a></li>
+                        <li><a href="#about" class="link-animated hover:text-primary-400 transition-colors inline-block">About</a></li>
+                        <li><a href="/" class="link-animated hover:text-primary-400 transition-colors inline-block">Home</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-cream-50 font-bold mb-4">Resources</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#" class="hover:text-primary-400 transition-colors">Documentation</a></li>
-                        <li><a href="#" class="hover:text-primary-400 transition-colors">Blog</a></li>
-                        <li><a href="#" class="hover:text-primary-400 transition-colors">Support</a></li>
+                    <h4 class="text-cream-50 font-bold mb-4 text-lg">Resources</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#" class="link-animated hover:text-primary-400 transition-colors inline-block">Documentation</a></li>
+                        <li><a href="#" class="link-animated hover:text-primary-400 transition-colors inline-block">Blog</a></li>
+                        <li><a href="#" class="link-animated hover:text-primary-400 transition-colors inline-block">Support</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-cream-50 font-bold mb-4">Legal</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#" class="hover:text-primary-400 transition-colors">Privacy Policy</a></li>
-                        <li><a href="#" class="hover:text-primary-400 transition-colors">Terms of Service</a></li>
+                    <h4 class="text-cream-50 font-bold mb-4 text-lg">Legal</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#" class="link-animated hover:text-primary-400 transition-colors inline-block">Privacy Policy</a></li>
+                        <li><a href="#" class="link-animated hover:text-primary-400 transition-colors inline-block">Terms of Service</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="mt-8 pt-8 border-t border-navy-700 text-center text-sm">
-                <p>&copy; 2025 MPAP Frameworks. All rights reserved.</p>
+            <div class="pt-8 border-t border-navy-800 text-center">
+                <p class="text-sm text-cream-400">&copy; 2025 MPAP Frameworks. All rights reserved.</p>
             </div>
         </div>
     </footer>

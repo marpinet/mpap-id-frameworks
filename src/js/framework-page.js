@@ -274,13 +274,38 @@ function initializeDemoAIChat() {
     sendButton.disabled = false;
     
     // Update placeholder
-    chatInput.placeholder = 'Ask the AI for help (Demo Mode)...';
+    chatInput.placeholder = 'Type your message here...';
     
     // Remove "coming soon" message
     const comingSoon = chatMessages.querySelector('.text-center');
     if (comingSoon) {
         comingSoon.remove();
     }
+    
+    // Add initial AI greeting message
+    const greetingMsg = document.createElement('div');
+    greetingMsg.className = 'flex justify-start';
+    greetingMsg.innerHTML = `
+        <div class="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg px-4 py-3 max-w-[85%]">
+            <p class="font-semibold mb-2">👋 Hello! I'm your AI assistant for the ${currentFramework?.name || 'framework'}.</p>
+            <p class="mb-3">I'm here to help you complete this framework step by step. Here's what I can do for you:</p>
+            <ul class="list-disc list-inside space-y-1 mb-3 text-sm">
+                <li><strong>Provide examples</strong> for each section</li>
+                <li><strong>Research information</strong> relevant to your project</li>
+                <li><strong>Suggest content</strong> based on best practices</li>
+                <li><strong>Answer questions</strong> about the framework</li>
+            </ul>
+            <p class="font-semibold">To get started, try asking:</p>
+            <ul class="list-none space-y-1 text-sm mt-2">
+                <li>• "Can you give me an example for the first section?"</li>
+                <li>• "Help me understand what this framework is for"</li>
+                <li>• "What should I include in the [section name]?"</li>
+            </ul>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-3 italic">Note: This is a demo version. Full AI integration coming soon!</p>
+        </div>
+    `;
+    chatMessages.appendChild(greetingMsg);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
     
     const sendMessage = async () => {
         const message = chatInput.value.trim();
@@ -290,7 +315,7 @@ function initializeDemoAIChat() {
         const userMsg = document.createElement('div');
         userMsg.className = 'flex justify-end';
         userMsg.innerHTML = `
-            <div class="bg-primary-600 text-white rounded-lg px-4 py-2 max-w-[80%]">
+            <div class="bg-primary-500 text-navy-900 rounded-lg px-4 py-2 max-w-[80%] font-medium">
                 ${message}
             </div>
         `;
@@ -325,9 +350,9 @@ function initializeDemoAIChat() {
         const aiMsg = document.createElement('div');
         aiMsg.className = 'flex justify-start';
         aiMsg.innerHTML = `
-            <div class="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg px-4 py-2 max-w-[80%]">
+            <div class="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg px-4 py-3 max-w-[85%]">
                 ${response}
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 italic">Note: This is a demo response. Real AI integration coming soon!</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-3 pt-2 border-t border-gray-300 dark:border-gray-600 italic">💡 Demo Mode: Real AI integration coming soon!</p>
             </div>
         `;
         chatMessages.appendChild(aiMsg);
@@ -346,26 +371,109 @@ function initializeDemoAIChat() {
 
 function generateDemoResponse(userMessage) {
     const message = userMessage.toLowerCase();
+    const frameworkName = currentFramework?.name || 'framework';
     
     // Context-aware responses based on current framework
-    if (message.includes('help') || message.includes('how')) {
-        return `I can help you complete the ${currentFramework?.name || 'framework'}! Each section has specific guidance. Would you like me to suggest content for a particular section, or would you like general tips for completing this framework?`;
+    if (message.includes('help') || message.includes('how') || message.includes('start')) {
+        return `<p class="font-semibold mb-2">Great question! Here's how to get started with the ${frameworkName}:</p>
+                <ol class="list-decimal list-inside space-y-2 mb-3">
+                    <li><strong>Read each section carefully</strong> - Understand what information is needed</li>
+                    <li><strong>Start with what you know</strong> - Fill in the sections you have information for</li>
+                    <li><strong>Use the placeholders as guides</strong> - They show you what kind of content to include</li>
+                    <li><strong>Save frequently</strong> - Your work is auto-saved, but manual saves ensure nothing is lost</li>
+                </ol>
+                <p class="mt-2">💡 <strong>Pro tip:</strong> You don't need to complete everything at once. Work section by section and come back later to refine.</p>
+                <p class="mt-2">Would you like me to provide an example for a specific section?</p>`;
     }
     
     if (message.includes('example') || message.includes('sample')) {
-        return `Here's an example for the ${currentFramework?.name || 'framework'}:\n\nFor the first section, you might write: "Our project aims to improve user engagement by 40% through redesigning the onboarding experience. We'll focus on reducing friction points and providing clear value propositions."\n\nWould you like more specific examples for other sections?`;
+        return `<p class="font-semibold mb-2">Here's a practical example for the ${frameworkName}:</p>
+                <div class="bg-white dark:bg-gray-800 p-3 rounded border border-gray-300 dark:border-gray-600 my-2">
+                    <p class="text-sm italic mb-2">Example: Project Charter - Project Purpose</p>
+                    <p class="text-sm">"To redesign our customer onboarding experience to reduce drop-off rates by 40% and improve user satisfaction scores from 3.2 to 4.5 out of 5 within 6 months. This will be achieved through user research, iterative prototyping, and data-driven optimization."</p>
+                </div>
+                <p class="mt-2"><strong>Key elements this example includes:</strong></p>
+                <ul class="list-disc list-inside space-y-1 text-sm mt-2 mb-3">
+                    <li>Clear objective (reduce drop-off rates)</li>
+                    <li>Measurable targets (40%, 3.2 to 4.5)</li>
+                    <li>Timeline (within 6 months)</li>
+                    <li>Approach (research, prototyping, optimization)</li>
+                </ul>
+                <p class="mt-2">📝 Try to include similar specificity in your response. Which section would you like an example for?</p>`;
     }
     
-    if (message.includes('research') || message.includes('data')) {
-        return `I can help you find relevant research! For ${currentFramework?.name || 'this framework'}, I'd recommend looking into:\n\n• Industry benchmarks and case studies\n• User research methodologies\n• Best practices from similar projects\n\nWhat specific area would you like me to research further?`;
+    if (message.includes('research') || message.includes('data') || message.includes('find')) {
+        return `<p class="font-semibold mb-2">I can help you gather research for the ${frameworkName}!</p>
+                <p class="mb-2">Here's my recommended approach:</p>
+                <ol class="list-decimal list-inside space-y-2 mb-3">
+                    <li><strong>Industry benchmarks</strong> - Look for reports from Gartner, Forrester, or industry associations</li>
+                    <li><strong>Case studies</strong> - Search for similar projects on Medium, company blogs, or design publications</li>
+                    <li><strong>Academic research</strong> - Check Google Scholar for peer-reviewed studies</li>
+                    <li><strong>Market data</strong> - Use Statista, IBISWorld, or government statistics</li>
+                </ol>
+                <p class="mt-2">🔍 <strong>Quick tip:</strong> Use specific search terms like "[your industry] + [framework topic] + case study" for better results.</p>
+                <p class="mt-2">What specific topic or section do you need research for? I can provide more targeted guidance.</p>`;
     }
     
-    if (message.includes('stakeholder') || message.includes('people')) {
-        return `For stakeholder analysis, consider identifying:\n\n1. Primary stakeholders (directly impacted)\n2. Secondary stakeholders (indirectly affected)\n3. Key influencers and decision-makers\n4. End users and beneficiaries\n\nWould you like help mapping their relationships or influence levels?`;
+    if (message.includes('stakeholder') || message.includes('people') || message.includes('who')) {
+        return `<p class="font-semibold mb-2">Let me help you identify stakeholders systematically:</p>
+                <p class="mb-2"><strong>Step 1: List everyone involved or affected</strong></p>
+                <ul class="list-disc list-inside space-y-1 text-sm mb-3">
+                    <li>Who makes decisions about this project?</li>
+                    <li>Who will use or be affected by the results?</li>
+                    <li>Who controls resources (budget, people, time)?</li>
+                    <li>Who has expertise you need?</li>
+                </ul>
+                <p class="mb-2"><strong>Step 2: Categorize them</strong></p>
+                <ol class="list-decimal list-inside space-y-1 text-sm mb-3">
+                    <li><strong>Primary:</strong> Directly involved or impacted</li>
+                    <li><strong>Secondary:</strong> Indirectly affected</li>
+                    <li><strong>Key influencers:</strong> Can significantly impact success</li>
+                </ol>
+                <p class="mt-2">💡 <strong>Action item:</strong> Create a simple list first, then we can map their influence and interest levels.</p>
+                <p class="mt-2">Would you like help analyzing their relationships or engagement strategies?</p>`;
     }
     
-    // Default helpful response
-    return `I understand you're asking about "${userMessage}". In the context of ${currentFramework?.name || 'this framework'}, I can help by:\n\n• Providing examples and templates\n• Researching relevant information\n• Suggesting best practices\n• Reviewing your content\n\nWhat specific aspect would you like me to focus on?`;
+    if (message.includes('what') && (message.includes('section') || message.includes('include'))) {
+        return `<p class="font-semibold mb-2">Here's what to include in each section:</p>
+                <p class="mb-2"><strong>General guidelines for any section:</strong></p>
+                <ul class="list-disc list-inside space-y-2 mb-3">
+                    <li><strong>Be specific:</strong> Use concrete numbers, names, and dates instead of vague descriptions</li>
+                    <li><strong>Be concise:</strong> Aim for clarity - 2-3 well-written paragraphs are better than pages of fluff</li>
+                    <li><strong>Be relevant:</strong> Focus on information that directly supports decision-making</li>
+                    <li><strong>Use examples:</strong> Real-world examples make abstract concepts tangible</li>
+                </ul>
+                <p class="mt-2">📋 Look at the placeholder text in each field - it gives you hints about what to write!</p>
+                <p class="mt-2">Which specific section are you working on? I can give you detailed guidance.</p>`;
+    }
+    
+    if (message.includes('thank') || message.includes('thanks')) {
+        return `<p class="mb-2">You're very welcome! I'm here to help. 😊</p>
+                <p class="mb-2">Remember, completing a framework is an iterative process. Here are some tips as you continue:</p>
+                <ul class="list-disc list-inside space-y-1 text-sm mb-3">
+                    <li>Save your work regularly</li>
+                    <li>Review and refine sections as you gather more information</li>
+                    <li>Don't hesitate to ask for more examples or clarification</li>
+                </ul>
+                <p class="mt-2">Is there anything else I can help you with?</p>`;
+    }
+    
+    // Default helpful response with clear structure
+    return `<p class="font-semibold mb-2">I'm here to help with "${userMessage}"!</p>
+            <p class="mb-2">For the <strong>${frameworkName}</strong>, I can assist you with:</p>
+            <ul class="list-disc list-inside space-y-2 mb-3">
+                <li><strong>Examples:</strong> See how others have completed similar sections</li>
+                <li><strong>Research:</strong> Find relevant data, case studies, and best practices</li>
+                <li><strong>Guidance:</strong> Get step-by-step instructions for each section</li>
+                <li><strong>Review:</strong> Feedback on your content and suggestions for improvement</li>
+            </ul>
+            <p class="mt-2">💬 <strong>Try asking more specifically:</strong></p>
+            <ul class="list-none space-y-1 text-sm mt-2">
+                <li>• "Give me an example for [section name]"</li>
+                <li>• "Help me research [specific topic]"</li>
+                <li>• "What should I write about [section name]?"</li>
+            </ul>
+            <p class="mt-2">What would you like to focus on first?</p>`;
 }
 
 // Demo file processing

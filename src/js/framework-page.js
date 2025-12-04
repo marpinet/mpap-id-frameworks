@@ -1393,7 +1393,7 @@ function initializeKeyboardShortcuts() {
         else if (e.key === 'd') {
             e.preventDefault();
             if (confirm('Clear current section?')) {
-                const section = frameworkSteps[currentStepIndex];
+                const section = currentFramework.sections[currentStepIndex];
                 frameworkData[section.id] = '';
                 document.getElementById('current-step-input').value = '';
                 triggerAutoSave();
@@ -1473,8 +1473,18 @@ document.addEventListener('DOMContentLoaded', () => {
  * Initiate a conversation based on the current step
  */
 function initiateStepConversation(chatMessages) {
-  const currentSection = frameworkSteps[currentStepIndex];
-  const sectionId = currentSection?.id;
+  if (!currentFramework || !currentFramework.sections) {
+    console.error('Framework not loaded');
+    return;
+  }
+  
+  const currentSection = currentFramework.sections[currentStepIndex];
+  if (!currentSection) {
+    console.error('Current section not found');
+    return;
+  }
+  
+  const sectionId = currentSection.id;
   const sectionData = frameworkData[sectionId];
   const isEmpty = !sectionData || sectionData.trim() === '';
 
@@ -1482,7 +1492,7 @@ function initiateStepConversation(chatMessages) {
 
   if (isEmpty) {
     // Section is empty - offer help to get started
-    greeting = `👋 Let's work on <strong>${currentSection.name}</strong>! I can help you get started with examples, a guided walkthrough, tips, or answer any questions.`;
+    greeting = `👋 Let's work on <strong>${currentSection.title}</strong>! I can help you get started with examples, a guided walkthrough, tips, or answer any questions.`;
     buttons = [
       { action: 'example', emoji: '📝', text: 'Show Example' },
       { action: 'guide', emoji: '🗺️', text: 'Guide Me' },
@@ -1491,7 +1501,7 @@ function initiateStepConversation(chatMessages) {
     ];
   } else {
     // Section has content - offer enhancement options
-    greeting = `Great work on <strong>${currentSection.name}</strong>! 👏 Want me to review what you have, expand on it, suggest improvements, or help with the next section?`;
+    greeting = `Great work on <strong>${currentSection.title}</strong>! 👏 Want me to review what you have, expand on it, suggest improvements, or help with the next section?`;
     buttons = [
       { action: 'review', emoji: '🔍', text: 'Review This' },
       { action: 'expand', emoji: '📈', text: 'Expand Ideas' },
@@ -1626,33 +1636,60 @@ function getActionEmoji(action) {
  * Generate contextual response based on action and current section
  */
 function generateActionResponse(action, section) {
-  const sectionName = section.name;
+  const sectionName = section.title || section.name;
   const sectionId = section.id;
 
+  // Get framework-specific context
+  const frameworkType = currentFramework?.id || '';
+  const frameworkName = currentFramework?.name || 'framework';
+  
   // Response templates organized by action type
   const responses = {
     example: {
-      'vision-statement': `Here's a compelling vision statement example:<br><br><strong>"To become the world's leading sustainable transportation company, making clean mobility accessible to everyone by 2030."</strong><br><br>Notice how it:<br>• States a clear ambition ("world's leading")<br>• Includes a time horizon (2030)<br>• Defines the impact (accessible to everyone)<br>• Is inspiring yet achievable`,
+      // Project Charter examples
+      'project-name': `<strong>Example:</strong> "Customer Onboarding Experience Redesign"<br><br>A good project name should be:<br>• Clear and descriptive<br>• Action-oriented<br>• Specific enough to understand the scope<br>• Professional and memorable`,
       
-      'target-market': `Let me show you a well-defined target market:<br><br><strong>Primary Segment:</strong><br>• Urban professionals, 25-40 years old<br>• Income: $75K-150K annually<br>• Tech-savvy early adopters<br>• Value convenience and sustainability<br>• Located in major metropolitan areas<br><br>See how it's specific about demographics, psychographics, and geography? Try applying this structure to your audience.`,
+      'project-background': `<strong>Example:</strong> "Our current onboarding process has a 45% drop-off rate. Customer feedback indicates confusion during the initial setup phase. Competitors are offering smoother experiences, and we're losing potential customers in the first 24 hours. This redesign aims to address these issues and improve retention."<br><br>Notice: Includes the problem, data, impact, and why now.`,
       
-      'default': `Here's an example for <strong>${sectionName}</strong>:<br><br>Consider a project similar to yours. The key is to be specific, actionable, and aligned with your overall strategy. Would you like me to tailor an example more specifically to your project?`
+      'intent': `<strong>Example:</strong> "To reduce customer frustration during onboarding and increase activation rates by creating a streamlined, intuitive first-time user experience."<br><br>Strong intents:<br>• Focus on the 'why'<br>• Connect to user needs<br>• Are motivating and clear`,
+      
+      'goal': `<strong>Example:</strong> "Increase onboarding completion rate from 55% to 85% within 6 months, while reducing time-to-first-value from 48 hours to 4 hours."<br><br>SMART goals include:<br>• Specific numbers<br>• Measurable outcomes<br>• Time-bound commitments`,
+      
+      'stakeholders': `<strong>Example:</strong><br>• <strong>Product Manager:</strong> Owns strategy and prioritization<br>• <strong>UX Designer:</strong> Creates new experience flows<br>• <strong>Engineering Lead:</strong> Technical implementation<br>• <strong>Customer Success:</strong> Provides user insights<br>• <strong>Marketing:</strong> Messaging alignment<br><br>Include role, responsibility, and influence level.`,
+      
+      'vision-statement': `<strong>Example:</strong> "To become the world's leading sustainable transportation company, making clean mobility accessible to everyone by 2030."<br><br>Notice how it:<br>• States a clear ambition<br>• Includes a time horizon<br>• Defines the impact<br>• Is inspiring yet achievable`,
+      
+      'target-market': `<strong>Example - B2B SaaS:</strong><br>• <strong>Company Size:</strong> 50-500 employees<br>• <strong>Industry:</strong> Tech startups, digital agencies<br>• <strong>Decision Maker:</strong> VP of Operations, age 35-50<br>• <strong>Pain Point:</strong> Manual workflows costing 20+ hrs/week<br>• <strong>Budget:</strong> $5K-$50K annually<br>• <strong>Geography:</strong> North America, Western Europe<br><br>Be this specific!`,
+      
+      'default': `<strong>Example for ${sectionName}:</strong><br><br>${section.placeholder || 'Think about your specific context and be concrete with details, numbers, and timelines. Good examples are specific, actionable, and measurable.'}<br><br>What specific aspect would you like me to elaborate on?`
     },
 
     guide: {
+      'project-name': `Let's create a compelling project name:<br><br>🎯 <strong>Formula:</strong> [Action Verb] + [What] + [Why/Outcome]<br><br><strong>Step 1:</strong> What's the main action? (Redesign, Build, Improve, Launch)<br><strong>Step 2:</strong> What are you changing? (specific feature, process, or product)<br><strong>Step 3:</strong> Optional: Add the goal or outcome<br><br><strong>Examples:</strong><br>• Redesign Customer Onboarding<br>• Build AI-Powered Analytics Platform<br>• Improve Mobile App Performance<br><br>What's your project about?`,
+      
+      'goal': `Let's create a SMART goal together:<br><br><strong>S - Specific:</strong> What exactly will you achieve?<br><strong>M - Measurable:</strong> How will you track progress?<br><strong>A - Achievable:</strong> Is it realistic given resources?<br><strong>R - Relevant:</strong> Why does this matter?<br><strong>T - Time-bound:</strong> When will it be done?<br><br><strong>Template:</strong><br>"[Increase/Decrease/Achieve] [metric] from [X] to [Y] by [date] by [method]"<br><br>Let's start: What metric matters most for your project?`,
+      
+      'stakeholders': `I'll help you identify all stakeholders:<br><br><strong>Step 1: Internal Stakeholders</strong><br>• Who's on the project team?<br>• Who approves budgets/decisions?<br>• Who's affected by the outcome?<br><br><strong>Step 2: External Stakeholders</strong><br>• Customers/users<br>• Partners or vendors<br>• Regulatory bodies<br><br><strong>Step 3: For each stakeholder, note:</strong><br>• Their role<br>• Their interest/influence (High/Medium/Low)<br>• How they'll be involved<br><br>Start by listing your project team members.`,
+      
       'vision-statement': `Let's build your vision statement step-by-step:<br><br><strong>Step 1:</strong> What transformation do you want to create? (Think big picture)<br><br><strong>Step 2:</strong> Who benefits from this transformation?<br><br><strong>Step 3:</strong> When do you aim to achieve this?<br><br><strong>Step 4:</strong> Combine these into one inspiring sentence.<br><br>Start with Step 1 - what transformation are you aiming for?`,
       
       'target-market': `I'll guide you through defining your target market:<br><br><strong>Step 1:</strong> Demographics - Who are they? (age, income, location)<br><br><strong>Step 2:</strong> Psychographics - What do they value? (beliefs, behaviors, priorities)<br><br><strong>Step 3:</strong> Pain Points - What problems do they face?<br><br><strong>Step 4:</strong> Buying Behavior - How do they make decisions?<br><br>Let's start with demographics. Describe your typical customer.`,
       
-      'default': `Let's work through <strong>${sectionName}</strong> together:<br><br>1️⃣ First, gather all relevant information<br>2️⃣ Next, organize it into key themes<br>3️⃣ Then, prioritize what's most important<br>4️⃣ Finally, document it clearly<br><br>Which step would you like to start with?`
+      'default': `Let's work through <strong>${sectionName}</strong> together:<br><br>📋 <strong>Step-by-Step Guide:</strong><br><br>1️⃣ <strong>Gather:</strong> Collect all relevant information<br>2️⃣ <strong>Organize:</strong> Group into key themes<br>3️⃣ <strong>Prioritize:</strong> Focus on what's most important<br>4️⃣ <strong>Document:</strong> Write clearly and specifically<br><br>💡 <strong>Tip:</strong> ${section.description || 'Focus on being specific and actionable'}<br><br>Ready to start? Tell me what you know so far.`
     },
 
     tips: {
-      'vision-statement': `💡 <strong>Pro Tips for Vision Statements:</strong><br><br>✓ Keep it concise (1-2 sentences max)<br>✓ Make it aspirational but believable<br>✓ Avoid jargon and buzzwords<br>✓ Focus on impact, not tactics<br>✓ Test it: Would it inspire your team?<br><br>Common mistake: Being too vague ("be the best"). Be specific about what "best" means for you.`,
+      'project-name': `💡 <strong>Project Naming Best Practices:</strong><br><br>✓ Keep it under 5 words<br>✓ Make it memorable and searchable<br>✓ Avoid acronyms unless widely known<br>✓ Test it: Can someone unfamiliar understand it?<br>✓ Consider adding version (v2, 2025, Phase 2) if iterating<br><br>❌ <strong>Avoid:</strong> Generic names like "Project Phoenix" or "Initiative X"`,
       
-      'target-market': `💡 <strong>Target Market Best Practices:</strong><br><br>✓ Be specific over broad (niche > everyone)<br>✓ Use real data when possible<br>✓ Consider multiple segments<br>✓ Identify the most valuable segment first<br>✓ Think about access and reach<br><br>Remember: Trying to serve everyone often means serving no one well.`,
+      'goal': `💡 <strong>Goal-Setting Best Practices:</strong><br><br>✓ Include specific numbers (%, $, quantity)<br>✓ Set a clear deadline<br>✓ Make it challenging but achievable<br>✓ Align with business/user outcomes<br>✓ Consider leading indicators, not just lagging<br><br>❌ <strong>Avoid:</strong> Vague goals like "improve quality" or "increase engagement"`,
       
-      'default': `💡 <strong>Tips for ${sectionName}:</strong><br><br>✓ Be specific and concrete<br>✓ Use data to support claims<br>✓ Think from user perspective<br>✓ Align with your overall strategy<br>✓ Keep it actionable<br><br>Quality over quantity - it's better to have a few strong insights than many weak ones.`
+      'stakeholders': `💡 <strong>Stakeholder Management Tips:</strong><br><br>✓ Map influence vs. interest (2x2 matrix)<br>✓ Identify decision-makers early<br>✓ Consider hidden stakeholders<br>✓ Plan communication frequency per group<br>✓ Update the map as project evolves<br><br>⚠️ <strong>Red flag:</strong> If everyone is "High Influence" - prioritize more carefully!`,
+      
+      'vision-statement': `💡 <strong>Pro Tips for Vision Statements:</strong><br><br>✓ Keep it concise (1-2 sentences max)<br>✓ Make it aspirational but believable<br>✓ Avoid jargon and buzzwords<br>✓ Focus on impact, not tactics<br>✓ Test it: Would it inspire your team?<br><br>❌ <strong>Common mistake:</strong> Being too vague ("be the best"). Be specific!`,
+      
+      'target-market': `💡 <strong>Target Market Best Practices:</strong><br><br>✓ Be specific over broad (niche > everyone)<br>✓ Use real data when possible<br>✓ Consider multiple segments<br>✓ Identify the most valuable segment first<br>✓ Think about access and reach<br><br>💡 Remember: Trying to serve everyone = serving no one well.`,
+      
+      'default': `💡 <strong>Tips for ${sectionName}:</strong><br><br>✓ Be specific and concrete<br>✓ Use data to support claims<br>✓ Think from user/stakeholder perspective<br>✓ Align with your overall ${frameworkName} goals<br>✓ Keep it actionable<br><br>💭 Ask yourself: "Could someone else execute this based on what I wrote?"<br><br>Quality over quantity!`
     },
 
     questions: {

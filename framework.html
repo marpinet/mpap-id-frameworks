@@ -106,6 +106,33 @@
                         <!-- Individual step will be shown here -->
                     </div>
 
+                    <!-- Visual Enhancement Section (framework-specific) -->
+                    <div id="visual-enhancement-section" class="hidden mt-6">
+                        <div class="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-lg p-6 border border-purple-200 dark:border-purple-800">
+                            <div class="flex items-start space-x-4">
+                                <div class="flex-shrink-0">
+                                    <svg class="w-8 h-8 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
+                                    </svg>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                                        ✨ Visual Template Available
+                                    </h4>
+                                    <p class="text-sm text-gray-700 dark:text-gray-300 mb-4" id="visual-enhancement-description">
+                                        Switch to a visual interface designed specifically for this framework type.
+                                    </p>
+                                    <button id="open-visual-mode-btn" class="btn-primary">
+                                        <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/>
+                                        </svg>
+                                        Open Visual Mode
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Navigation Buttons -->
                     <div class="flex items-center justify-between mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
                         <button id="prev-step-btn" class="btn-secondary flex items-center space-x-2" disabled>
@@ -268,6 +295,225 @@
                 <a href="/profile.html" class="btn-primary inline-block">
                     View Profile
                 </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Visual Mode Modals -->
+    
+    <!-- Journey Map Visual Modal -->
+    <div id="journey-map-visual" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 overflow-y-auto">
+        <div class="min-h-screen p-4">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-6xl mx-auto my-8">
+                <!-- Header -->
+                <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white">🗺️ Journey Map Timeline</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Visualize the user journey across stages</p>
+                    </div>
+                    <button data-close-modal="journey-map-visual" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+                
+                <!-- Timeline Content -->
+                <div class="p-6">
+                    <div class="relative">
+                        <!-- Timeline Line -->
+                        <div class="absolute top-12 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
+                        
+                        <!-- Journey Stages -->
+                        <div class="grid grid-cols-5 gap-4 relative z-10">
+                            <div class="journey-stage-card" data-stage="awareness">
+                                <div class="bg-blue-100 dark:bg-blue-900 rounded-lg p-4 shadow-md border-2 border-blue-500">
+                                    <div class="text-2xl mb-2">👀</div>
+                                    <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Awareness</h4>
+                                    <textarea class="w-full text-sm p-2 border rounded dark:bg-gray-700 dark:border-gray-600" rows="3" placeholder="User discovers problem..."></textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="journey-stage-card" data-stage="consideration">
+                                <div class="bg-indigo-100 dark:bg-indigo-900 rounded-lg p-4 shadow-md border-2 border-indigo-500">
+                                    <div class="text-2xl mb-2">🤔</div>
+                                    <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Consideration</h4>
+                                    <textarea class="w-full text-sm p-2 border rounded dark:bg-gray-700 dark:border-gray-600" rows="3" placeholder="User researches options..."></textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="journey-stage-card" data-stage="decision">
+                                <div class="bg-purple-100 dark:bg-purple-900 rounded-lg p-4 shadow-md border-2 border-purple-500">
+                                    <div class="text-2xl mb-2">✅</div>
+                                    <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Decision</h4>
+                                    <textarea class="w-full text-sm p-2 border rounded dark:bg-gray-700 dark:border-gray-600" rows="3" placeholder="User makes choice..."></textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="journey-stage-card" data-stage="experience">
+                                <div class="bg-pink-100 dark:bg-pink-900 rounded-lg p-4 shadow-md border-2 border-pink-500">
+                                    <div class="text-2xl mb-2">⭐</div>
+                                    <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Experience</h4>
+                                    <textarea class="w-full text-sm p-2 border rounded dark:bg-gray-700 dark:border-gray-600" rows="3" placeholder="User uses product..."></textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="journey-stage-card" data-stage="advocacy">
+                                <div class="bg-red-100 dark:bg-red-900 rounded-lg p-4 shadow-md border-2 border-red-500">
+                                    <div class="text-2xl mb-2">💬</div>
+                                    <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Advocacy</h4>
+                                    <textarea class="w-full text-sm p-2 border rounded dark:bg-gray-700 dark:border-gray-600" rows="3" placeholder="User shares feedback..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Save Button -->
+                    <div class="mt-6 flex justify-end">
+                        <button id="save-journey-map-btn" class="btn-primary">Save Journey Map</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stakeholder Grid Visual Modal -->
+    <div id="stakeholder-grid-visual" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 overflow-y-auto">
+        <div class="min-h-screen p-4">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-5xl mx-auto my-8">
+                <!-- Header -->
+                <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white">👥 Stakeholder Power/Interest Grid</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Map stakeholders by influence and interest</p>
+                    </div>
+                    <button data-close-modal="stakeholder-grid-visual" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+                
+                <!-- Grid Content -->
+                <div class="p-6">
+                    <div class="grid grid-cols-2 gap-4 h-[500px]">
+                        <!-- High Power, High Interest -->
+                        <div class="stakeholder-quadrant bg-red-50 dark:bg-red-900/20 border-2 border-red-500 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <h4 class="font-semibold text-gray-900 dark:text-white">🔴 Manage Closely</h4>
+                                <span class="text-xs text-gray-600 dark:text-gray-400">High Power / High Interest</span>
+                            </div>
+                            <textarea class="w-full h-[calc(100%-40px)] text-sm p-2 border rounded dark:bg-gray-700 dark:border-gray-600 resize-none" placeholder="Key decision makers who are highly engaged..."></textarea>
+                        </div>
+                        
+                        <!-- Low Power, High Interest -->
+                        <div class="stakeholder-quadrant bg-yellow-50 dark:bg-yellow-900/20 border-2 border-yellow-500 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <h4 class="font-semibold text-gray-900 dark:text-white">🟡 Keep Informed</h4>
+                                <span class="text-xs text-gray-600 dark:text-gray-400">Low Power / High Interest</span>
+                            </div>
+                            <textarea class="w-full h-[calc(100%-40px)] text-sm p-2 border rounded dark:bg-gray-700 dark:border-gray-600 resize-none" placeholder="Engaged but less influential stakeholders..."></textarea>
+                        </div>
+                        
+                        <!-- High Power, Low Interest -->
+                        <div class="stakeholder-quadrant bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-500 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <h4 class="font-semibold text-gray-900 dark:text-white">🔵 Keep Satisfied</h4>
+                                <span class="text-xs text-gray-600 dark:text-gray-400">High Power / Low Interest</span>
+                            </div>
+                            <textarea class="w-full h-[calc(100%-40px)] text-sm p-2 border rounded dark:bg-gray-700 dark:border-gray-600 resize-none" placeholder="Influential but not deeply engaged..."></textarea>
+                        </div>
+                        
+                        <!-- Low Power, Low Interest -->
+                        <div class="stakeholder-quadrant bg-gray-50 dark:bg-gray-900/20 border-2 border-gray-400 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <h4 class="font-semibold text-gray-900 dark:text-white">⚪ Monitor</h4>
+                                <span class="text-xs text-gray-600 dark:text-gray-400">Low Power / Low Interest</span>
+                            </div>
+                            <textarea class="w-full h-[calc(100%-40px)] text-sm p-2 border rounded dark:bg-gray-700 dark:border-gray-600 resize-none" placeholder="Minimal engagement needed..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <!-- Save Button -->
+                    <div class="mt-6 flex justify-end">
+                        <button id="save-stakeholder-grid-btn" class="btn-primary">Save Stakeholder Grid</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Map Visual Modal -->
+    <div id="system-map-visual" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 overflow-y-auto">
+        <div class="min-h-screen p-4">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-5xl mx-auto my-8">
+                <!-- Header -->
+                <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white">🌐 System Map</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Visualize components and relationships</p>
+                    </div>
+                    <button data-close-modal="system-map-visual" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+                
+                <!-- System Map Content -->
+                <div class="p-6">
+                    <div class="bg-gray-50 dark:bg-gray-900 rounded-lg p-6 min-h-[500px] border-2 border-dashed border-gray-300 dark:border-gray-600">
+                        <!-- Center Node -->
+                        <div class="flex items-center justify-center h-full">
+                            <div class="relative">
+                                <!-- Central System -->
+                                <div class="bg-primary-500 text-white rounded-lg p-6 shadow-lg text-center mb-8">
+                                    <div class="text-3xl mb-2">🎯</div>
+                                    <input type="text" class="bg-white text-gray-900 rounded px-3 py-2 text-center font-semibold" placeholder="Core System" />
+                                </div>
+                                
+                                <!-- Connected Components Grid -->
+                                <div class="grid grid-cols-3 gap-4 mt-8">
+                                    <div class="system-node bg-blue-100 dark:bg-blue-900 rounded-lg p-4 shadow">
+                                        <div class="text-xl mb-2">⚙️</div>
+                                        <input type="text" class="w-full text-sm p-1 border rounded dark:bg-gray-700" placeholder="Component 1" />
+                                    </div>
+                                    <div class="system-node bg-green-100 dark:bg-green-900 rounded-lg p-4 shadow">
+                                        <div class="text-xl mb-2">🔗</div>
+                                        <input type="text" class="w-full text-sm p-1 border rounded dark:bg-gray-700" placeholder="Component 2" />
+                                    </div>
+                                    <div class="system-node bg-purple-100 dark:bg-purple-900 rounded-lg p-4 shadow">
+                                        <div class="text-xl mb-2">📡</div>
+                                        <input type="text" class="w-full text-sm p-1 border rounded dark:bg-gray-700" placeholder="Component 3" />
+                                    </div>
+                                    <div class="system-node bg-yellow-100 dark:bg-yellow-900 rounded-lg p-4 shadow">
+                                        <div class="text-xl mb-2">💾</div>
+                                        <input type="text" class="w-full text-sm p-1 border rounded dark:bg-gray-700" placeholder="Component 4" />
+                                    </div>
+                                    <div class="system-node bg-pink-100 dark:bg-pink-900 rounded-lg p-4 shadow">
+                                        <div class="text-xl mb-2">🌟</div>
+                                        <input type="text" class="w-full text-sm p-1 border rounded dark:bg-gray-700" placeholder="Component 5" />
+                                    </div>
+                                    <div class="system-node bg-orange-100 dark:bg-orange-900 rounded-lg p-4 shadow">
+                                        <div class="text-xl mb-2">🔔</div>
+                                        <input type="text" class="w-full text-sm p-1 border rounded dark:bg-gray-700" placeholder="Component 6" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                        <p class="text-sm text-gray-700 dark:text-gray-300">
+                            💡 <strong>Tip:</strong> Identify key components, their relationships, and how they interact within the system.
+                        </p>
+                    </div>
+                    
+                    <!-- Save Button -->
+                    <div class="mt-6 flex justify-end">
+                        <button id="save-system-map-btn" class="btn-primary">Save System Map</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

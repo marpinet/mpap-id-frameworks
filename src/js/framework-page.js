@@ -231,6 +231,9 @@ function renderCurrentStep() {
         saveToLocalStorage();
         triggerAutoSave();
     });
+    
+    // Check if visual enhancement is available for this framework
+    checkAndShowVisualEnhancement();
 }
 
 // Generate context-aware instructions for each step
@@ -994,6 +997,205 @@ async function processFilesWithAI() {
 }
 
 // ============================================================================
+// FRAMEWORK-SPECIFIC VISUAL ENHANCEMENTS
+// ============================================================================
+
+/**
+ * Check if current framework has visual enhancements available
+ */
+function checkAndShowVisualEnhancement() {
+    const section = document.getElementById('visual-enhancement-section');
+    const description = document.getElementById('visual-enhancement-description');
+    const button = document.getElementById('open-visual-mode-btn');
+    
+    const visualModes = {
+        'journey-mapping': {
+            description: 'Visualize the user journey across stages with an interactive timeline.',
+            modalId: 'journey-map-visual'
+        },
+        'stakeholder-mapping': {
+            description: 'Map stakeholders on a Power/Interest grid for strategic planning.',
+            modalId: 'stakeholder-grid-visual'
+        },
+        'system-mapping': {
+            description: 'Create a visual system map showing components and relationships.',
+            modalId: 'system-map-visual'
+        }
+    };
+    
+    const visualMode = visualModes[frameworkId];
+    
+    if (visualMode) {
+        section.classList.remove('hidden');
+        description.textContent = visualMode.description;
+        
+        // Update button click handler
+        button.onclick = () => {
+            modal.open(visualMode.modalId);
+        };
+    } else {
+        section.classList.add('hidden');
+    }
+}
+
+/**
+ * Initialize visual mode functionality
+ */
+function initializeVisualModes() {
+    // Journey Map Save
+    document.getElementById('save-journey-map-btn')?.addEventListener('click', () => {
+        saveJourneyMap();
+    });
+    
+    // Stakeholder Grid Save
+    document.getElementById('save-stakeholder-grid-btn')?.addEventListener('click', () => {
+        saveStakeholderGrid();
+    });
+    
+    // System Map Save
+    document.getElementById('save-system-map-btn')?.addEventListener('click', () => {
+        saveSystemMap();
+    });
+}
+
+/**
+ * Save Journey Map data
+ */
+function saveJourneyMap() {
+    const stages = ['awareness', 'consideration', 'decision', 'experience', 'advocacy'];
+    const journeyData = {};
+    
+    stages.forEach(stage => {
+        const textarea = document.querySelector(`[data-stage="${stage}"] textarea`);
+        if (textarea) {
+            journeyData[stage] = textarea.value;
+        }
+    });
+    
+    // Save to framework data
+    frameworkData['journey-stages'] = JSON.stringify(journeyData);
+    saveToLocalStorage();
+    
+    if (currentUser) {
+        autoSaveFramework();
+    }
+    
+    modal.close('journey-map-visual');
+    showSuccess('Journey map saved successfully!');
+}
+
+/**
+ * Save Stakeholder Grid data
+ */
+function saveStakeholderGrid() {
+    const quadrants = document.querySelectorAll('.stakeholder-quadrant textarea');
+    const gridData = {};
+    
+    quadrants.forEach((textarea, index) => {
+        const quadrantNames = ['manage-closely', 'keep-informed', 'keep-satisfied', 'monitor'];
+        gridData[quadrantNames[index]] = textarea.value;
+    });
+    
+    // Save to framework data
+    frameworkData['stakeholder-grid'] = JSON.stringify(gridData);
+    saveToLocalStorage();
+    
+    if (currentUser) {
+        autoSaveFramework();
+    }
+    
+    modal.close('stakeholder-grid-visual');
+    showSuccess('Stakeholder grid saved successfully!');
+}
+
+/**
+ * Save System Map data
+ */
+function saveSystemMap() {
+    const centerInput = document.querySelector('#system-map-visual input[placeholder="Core System"]');
+    const componentInputs = document.querySelectorAll('.system-node input');
+    
+    const systemData = {
+        center: centerInput?.value || '',
+        components: []
+    };
+    
+    componentInputs.forEach(input => {
+        if (input.value) {
+            systemData.components.push(input.value);
+        }
+    });
+    
+    // Save to framework data
+    frameworkData['system-structure'] = JSON.stringify(systemData);
+    saveToLocalStorage();
+    
+    if (currentUser) {
+        autoSaveFramework();
+    }
+    
+    modal.close('system-map-visual');
+    showSuccess('System map saved successfully!');
+}
+
+/**
+ * Load visual data when opening modals
+ */
+function loadVisualData() {
+    // Load Journey Map data
+    if (frameworkData['journey-stages']) {
+        try {
+            const journeyData = JSON.parse(frameworkData['journey-stages']);
+            Object.keys(journeyData).forEach(stage => {
+                const textarea = document.querySelector(`[data-stage="${stage}"] textarea`);
+                if (textarea) {
+                    textarea.value = journeyData[stage];
+                }
+            });
+        } catch (e) {
+            console.error('Error loading journey map data:', e);
+        }
+    }
+    
+    // Load Stakeholder Grid data
+    if (frameworkData['stakeholder-grid']) {
+        try {
+            const gridData = JSON.parse(frameworkData['stakeholder-grid']);
+            const quadrants = document.querySelectorAll('.stakeholder-quadrant textarea');
+            const quadrantNames = ['manage-closely', 'keep-informed', 'keep-satisfied', 'monitor'];
+            
+            quadrants.forEach((textarea, index) => {
+                if (gridData[quadrantNames[index]]) {
+                    textarea.value = gridData[quadrantNames[index]];
+                }
+            });
+        } catch (e) {
+            console.error('Error loading stakeholder grid data:', e);
+        }
+    }
+    
+    // Load System Map data
+    if (frameworkData['system-structure']) {
+        try {
+            const systemData = JSON.parse(frameworkData['system-structure']);
+            const centerInput = document.querySelector('#system-map-visual input[placeholder="Core System"]');
+            if (centerInput && systemData.center) {
+                centerInput.value = systemData.center;
+            }
+            
+            const componentInputs = document.querySelectorAll('.system-node input');
+            componentInputs.forEach((input, index) => {
+                if (systemData.components[index]) {
+                    input.value = systemData.components[index];
+                }
+            });
+        } catch (e) {
+            console.error('Error loading system map data:', e);
+        }
+    }
+}
+
+// ============================================================================
 // AUTO-SAVE & WORKFLOW IMPROVEMENTS
 // ============================================================================
 
@@ -1214,6 +1416,20 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeDemoAIChat();
     enhanceFileUpload();
     initializeKeyboardShortcuts();
+    initializeVisualModes();
+    
+    // Load visual data when modals open
+    document.querySelectorAll('[data-close-modal]').forEach(btn => {
+        const modalId = btn.getAttribute('data-close-modal');
+        if (modalId.includes('visual')) {
+            // Load data when opening visual modals
+            btn.closest('[id$="-visual"]')?.addEventListener('transitionend', () => {
+                if (!btn.closest('[id$="-visual"]').classList.contains('hidden')) {
+                    loadVisualData();
+                }
+            });
+        }
+    });
     
     // Save button listeners
     document.getElementById('save-framework-btn')?.addEventListener('click', saveFramework);

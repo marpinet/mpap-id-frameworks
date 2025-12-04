@@ -86,23 +86,141 @@
     </nav>
 
     <!-- Hero Section -->
-    <section class="bg-gradient-to-br from-primary-100 via-cream-100 to-primary-50 dark:from-navy-800 dark:to-navy-900 py-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section class="bg-gradient-to-br from-primary-100 via-cream-100 to-primary-50 dark:from-navy-800 dark:to-navy-900 py-24 md:py-32 relative overflow-hidden">
+        <!-- Decorative elements -->
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-10 left-10 w-32 h-32 bg-primary-600 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-10 right-10 w-48 h-48 bg-navy-900 rounded-full blur-3xl"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="text-center">
-                <h1 class="text-4xl md:text-6xl font-bold font-display text-navy-900 dark:text-cream-50 mb-6">
-                    Design Frameworks for
-                    <span class="text-primary-600 dark:text-primary-400">Sense-Making</span>
+                <!-- Badge -->
+                <div class="inline-flex items-center px-4 py-2 bg-white dark:bg-navy-700 rounded-full shadow-md mb-6">
+                    <span class="text-primary-600 dark:text-primary-400 font-semibold text-sm mr-2">✨ New</span>
+                    <span class="text-gray-600 dark:text-gray-300 text-sm">AI-powered framework assistance</span>
+                </div>
+                
+                <h1 class="text-5xl md:text-7xl font-bold font-display text-navy-900 dark:text-cream-50 mb-6 leading-tight">
+                    Transform Ideas into
+                    <span class="text-primary-600 dark:text-primary-400 block mt-2">Strategic Action</span>
                 </h1>
-                <p class="text-xl text-navy-600 dark:text-cream-300 mb-8 max-w-3xl mx-auto">
-                    Interactive platform inspired by Vijay Kumar's 101 Design Methods. Guide your team through structured design thinking processes, from problem definition to strategic solutions.
+                
+                <p class="text-xl md:text-2xl text-navy-600 dark:text-cream-300 mb-4 max-w-3xl mx-auto leading-relaxed">
+                    Structured frameworks inspired by <strong>Vijay Kumar's 101 Design Methods</strong>.
                 </p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="#frameworks" class="btn-primary text-lg">
-                        Explore Frameworks
+                
+                <p class="text-lg text-navy-500 dark:text-cream-400 mb-10 max-w-2xl mx-auto">
+                    Guide your team from problem discovery to strategic solutions with interactive tools, AI assistance, and visual templates.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+                    <a href="#frameworks" class="btn-primary text-lg px-8 py-4 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all">
+                        <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                        Get Started Free
                     </a>
-                    <a href="#about" class="btn-secondary text-lg">
-                        Learn More
+                    <a href="#about" class="btn-secondary text-lg px-8 py-4 shadow-md hover:shadow-lg transform hover:scale-105 transition-all">
+                        <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        Watch Demo
                     </a>
+                </div>
+                
+                <!-- Feature highlights -->
+                <div class="flex flex-wrap justify-center gap-6 text-sm text-navy-600 dark:text-cream-400">
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span>16 Professional Frameworks</span>
+                    </div>
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span>AI-Powered Assistance</span>
+                    </div>
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span>Visual Templates</span>
+                    </div>
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span>Auto-Save & Export</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recently Accessed Section (for logged-in users) -->
+    <section id="recent-frameworks-section" class="hidden py-16 bg-white dark:bg-navy-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-3xl font-bold font-display text-navy-900 dark:text-cream-50 mb-2">
+                        Continue Where You Left Off
+                    </h2>
+                    <p class="text-navy-600 dark:text-cream-400">Your recently accessed frameworks</p>
+                </div>
+                <a href="/projects.html" class="text-primary-600 dark:text-primary-400 hover:underline font-medium">
+                    View all projects →
+                </a>
+            </div>
+            
+            <!-- Recent Frameworks Grid -->
+            <div id="recent-frameworks-grid" class="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- Loading state -->
+                <div class="col-span-full text-center py-8">
+                    <div class="animate-pulse text-gray-400 dark:text-gray-600">Loading...</div>
+                </div>
+            </div>
+            
+            <!-- Empty state -->
+            <div id="recent-frameworks-empty" class="hidden text-center py-12">
+                <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">No frameworks yet</h3>
+                <p class="text-gray-600 dark:text-gray-400 mb-4">Start by exploring the frameworks below</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Stats Section (for logged-in users) -->
+    <section id="quick-stats-section" class="hidden py-16 bg-gradient-to-br from-primary-50 to-cream-100 dark:from-navy-900 dark:to-navy-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <!-- Total Projects -->
+                <div class="bg-white dark:bg-navy-700 rounded-xl shadow-md p-6 text-center">
+                    <div class="text-3xl font-bold text-primary-600 dark:text-primary-400 mb-2" id="stat-home-total">0</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">Total Projects</div>
+                </div>
+                
+                <!-- In Progress -->
+                <div class="bg-white dark:bg-navy-700 rounded-xl shadow-md p-6 text-center">
+                    <div class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2" id="stat-home-progress">0</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">In Progress</div>
+                </div>
+                
+                <!-- Completed -->
+                <div class="bg-white dark:bg-navy-700 rounded-xl shadow-md p-6 text-center">
+                    <div class="text-3xl font-bold text-green-600 dark:text-green-400 mb-2" id="stat-home-completed">0</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">Completed</div>
+                </div>
+                
+                <!-- Most Used -->
+                <div class="bg-white dark:bg-navy-700 rounded-xl shadow-md p-6 text-center">
+                    <div class="text-3xl mb-2" id="stat-home-favorite">📊</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">Most Used</div>
                 </div>
             </div>
         </div>

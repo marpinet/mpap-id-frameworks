@@ -137,5 +137,197 @@ if (categoriesContainer) {
     });
 }
 
+// ============================================================================
+// HOMEPAGE ENHANCEMENTS - RECENT FRAMEWORKS & STATS
+// ============================================================================
+
+/**
+ * Load and display recent frameworks for logged-in users
+ */
+async function loadRecentFrameworks() {
+    const { user } = await auth.getUser();
+    
+    if (!user) {
+        return;
+    }
+    
+    const recentSection = document.getElementById('recent-frameworks-section');
+    const statsSection = document.getElementById('quick-stats-section');
+    const grid = document.getElementById('recent-frameworks-grid');
+    const emptyState = document.getElementById('recent-frameworks-empty');
+    
+    // Show sections for logged-in users
+    recentSection?.classList.remove('hidden');
+    statsSection?.classList.remove('hidden');
+    
+    try {
+        // Fetch user's frameworks
+        const { data: frameworks, error } = await supabase
+            .from('user_frameworks')
+            .select('*')
+            .eq('user_id', user.id)
+            .order('updated_at', { ascending: false })
+            .limit(4);
+        
+        if (error) throw error;
+        
+        if (!frameworks || frameworks.length === 0) {
+            grid.innerHTML = '';
+            emptyState?.classList.remove('hidden');
+            return;
+        }
+        
+        // Calculate stats
+        const total = frameworks.length;
+        let inProgress = 0;
+        let completed = 0;
+        const frameworkCounts = {};
+        
+        frameworks.forEach(fw => {
+            const completion = calculateCompletion(fw.framework_data);
+            if (completion === 0) {
+                // draft - don't count
+            } else if (completion === 100) {
+                completed++;
+            } else {
+                inProgress++;
+            }
+            
+            // Count framework usage
+            frameworkCounts[fw.framework_type] = (frameworkCounts[fw.framework_type] || 0) + 1;
+        });
+        
+        // Find most used framework
+        let mostUsed = '📊';
+        let maxCount = 0;
+        Object.entries(frameworkCounts).forEach(([type, count]) => {
+            if (count > maxCount) {
+                maxCount = count;
+                const fwData = getFrameworkData(type);
+                mostUsed = fwData?.icon || '📊';
+            }
+        });
+        
+        // Update stats
+        document.getElementById('stat-home-total').textContent = total;
+        document.getElementById('stat-home-progress').textContent = inProgress;
+        document.getElementById('stat-home-completed').textContent = completed;
+        document.getElementById('stat-home-favorite').textContent = mostUsed;
+        
+        // Render recent frameworks
+        emptyState?.classList.add('hidden');
+        grid.innerHTML = frameworks.slice(0, 4).map(fw => {
+            const fwData = getFrameworkData(fw.framework_type);
+            const completion = calculateCompletion(fw.framework_data);
+            const timeAgo = getTimeAgo(new Date(fw.updated_at));
+            
+            return `
+                <a href="/framework.html?id=${fw.framework_type}&project=${fw.id}" 
+                   class="card hover:shadow-xl transition-all group">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-4xl">${fwData?.icon || '📋'}</span>
+                        <span class="text-xs px-2 py-1 rounded-full ${getStatusClass(completion)}">
+                            ${completion}%
+                        </span>
+                    </div>
+                    <h3 class="font-bold text-navy-900 dark:text-cream-50 mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                        ${fw.title}
+                    </h3>
+                    <p class="text-sm text-navy-600 dark:text-cream-400 mb-3">${fwData?.name || 'Framework'}</p>
+                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                        <div class="bg-primary-500 h-2 rounded-full transition-all" style="width: ${completion}%"></div>
+                    </div>
+                    <p class="text-xs text-gray-500 dark:text-gray-500 mt-2">${timeAgo}</p>
+                </a>
+            `;
+        }).join('');
+        
+    } catch (error) {
+        console.error('Error loading recent frameworks:', error);
+        grid.innerHTML = '<div class="col-span-full text-center text-red-500">Failed to load frameworks</div>';
+    }
+}
+
+/**
+ * Calculate completion percentage
+ */
+function calculateCompletion(frameworkData) {
+    if (!frameworkData || typeof frameworkData !== 'object') return 0;
+    
+    const sections = Object.keys(frameworkData).filter(key => 
+        !key.startsWith('_') && typeof frameworkData[key] === 'string'
+    );
+    
+    if (sections.length === 0) return 0;
+    
+    const filledSections = sections.filter(key => 
+        frameworkData[key] && frameworkData[key].trim().length > 0
+    );
+    
+    return Math.round((filledSections.length / sections.length) * 100);
+}
+
+/**
+ * Get framework data by ID
+ */
+function getFrameworkData(frameworkId) {
+    const allFrameworks = frameworkCategories.flatMap(cat => cat.frameworks);
+    const fw = allFrameworks.find(f => f.slug === frameworkId);
+    if (fw) {
+        return { name: fw.name, icon: getFrameworkIcon(frameworkId) };
+    }
+    return null;
+}
+
+/**
+ * Get framework icon
+ */
+function getFrameworkIcon(frameworkId) {
+    const icons = {
+        'project-charter': '📋',
+        'project-brief': '📝',
+        'canvas-business-plan': '📊',
+        'company-background': '🏢',
+        'resource-based-analysis': '🔧',
+        'system-mapping': '🌐',
+        'market-segmentation': '🎯',
+        'competitor-mapping': '📈',
+        'stakeholder-mapping': '👥',
+        'power-dynamics-mapping': '⚡',
+        'synthesize-research': '🔬',
+        'journey-mapping': '🗺️',
+        'translating-themes-to-opportunity-spaces': '💡',
+        'strategic-purpose': '🎯',
+        'strategic-roadmap': '🛣️',
+        'leverage-points-and-interventions': '🔄'
+    };
+    return icons[frameworkId] || '📋';
+}
+
+/**
+ * Get status class based on completion
+ */
+function getStatusClass(completion) {
+    if (completion === 0) return 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300';
+    if (completion === 100) return 'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300';
+    return 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300';
+}
+
+/**
+ * Get time ago string
+ */
+function getTimeAgo(date) {
+    const seconds = Math.floor((new Date() - date) / 1000);
+    
+    if (seconds < 60) return 'just now';
+    if (seconds < 3600) return Math.floor(seconds / 60) + ' min ago';
+    if (seconds < 86400) return Math.floor(seconds / 3600) + ' hr ago';
+    if (seconds < 2592000) return Math.floor(seconds / 86400) + ' days ago';
+    return Math.floor(seconds / 2592000) + ' months ago';
+}
+
+// Load recent frameworks on page load
+loadRecentFrameworks();
+
 // Export for use in other modules
 export { frameworkCategories };

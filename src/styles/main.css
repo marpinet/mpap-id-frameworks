@@ -4,25 +4,25 @@
 
 @layer base {
   body {
-    @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors;
+    @apply bg-cream-50 dark:bg-navy-900 text-navy-900 dark:text-cream-100 transition-colors;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors duration-200;
+    @apply px-6 py-3 bg-primary-500 hover:bg-primary-600 text-navy-900 font-semibold rounded-lg transition-all duration-200 shadow-md hover:shadow-lg;
   }
   
   .btn-secondary {
-    @apply px-6 py-3 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-gray-100 font-medium rounded-lg transition-colors duration-200;
+    @apply px-6 py-3 bg-navy-800 hover:bg-navy-700 dark:bg-cream-500 dark:hover:bg-cream-400 text-cream-50 dark:text-navy-900 font-semibold rounded-lg transition-all duration-200;
   }
   
   .card {
-    @apply bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 transition-all duration-200 hover:shadow-lg;
+    @apply bg-white dark:bg-navy-800 rounded-xl shadow-md p-6 transition-all duration-200 hover:shadow-lg border border-navy-100 dark:border-navy-700;
   }
   
   .input-field {
-    @apply w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all;
+    @apply w-full px-4 py-2 border border-navy-300 dark:border-navy-600 rounded-lg bg-white dark:bg-navy-800 text-navy-900 dark:text-cream-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all;
   }
   
   .tab-button {
@@ -30,15 +30,15 @@
   }
   
   .tab-button:hover:not(.active) {
-    @apply border-gray-300 dark:border-gray-600;
+    @apply border-navy-300 dark:border-navy-600;
   }
   
   .section-title {
-    @apply text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4;
+    @apply text-3xl md:text-4xl font-bold font-display text-navy-900 dark:text-cream-50 mb-4;
   }
   
   .section-subtitle {
-    @apply text-lg text-gray-600 dark:text-gray-400 mb-8;
+    @apply text-lg text-navy-600 dark:text-cream-400 mb-8;
   }
 }
 

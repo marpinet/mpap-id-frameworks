@@ -7,6 +7,11 @@
     <meta name="keywords" content="design frameworks, design thinking, design methods, sense-making, strategic design">
     <title>MPAP Frameworks - Interactive Design Framework Platform</title>
     
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     
@@ -15,28 +20,28 @@
 </head>
 <body class="min-h-screen">
     <!-- Navigation -->
-    <nav class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
+    <nav class="bg-cream-50 dark:bg-navy-900 shadow-sm border-b border-navy-200 dark:border-navy-700 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <!-- Logo -->
                 <div class="flex items-center">
-                    <a href="/" class="text-2xl font-bold text-primary-600 dark:text-primary-400">
+                    <a href="/" class="text-2xl font-bold font-display text-navy-900 dark:text-primary-400">
                         MPAP Frameworks
                     </a>
                 </div>
                 
                 <!-- Desktop Navigation -->
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="/" class="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                    <a href="/" class="text-navy-700 dark:text-cream-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors font-medium">
                         Home
                     </a>
-                    <a href="#frameworks" class="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                    <a href="#frameworks" class="text-navy-700 dark:text-cream-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors font-medium">
                         Frameworks
                     </a>
-                    <a href="#about" class="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                    <a href="#about" class="text-navy-700 dark:text-cream-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors font-medium">
                         About
                     </a>
-                    <button id="theme-toggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" aria-label="Toggle theme">
+                    <button id="theme-toggle" class="p-2 rounded-lg hover:bg-cream-200 dark:hover:bg-navy-700 transition-colors" aria-label="Toggle theme">
                         <svg class="w-5 h-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/>
                         </svg>
@@ -55,7 +60,7 @@
                 </div>
                 
                 <!-- Mobile menu button -->
-                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-cream-200 dark:hover:bg-navy-700">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
@@ -64,12 +69,12 @@
         </div>
         
         <!-- Mobile menu -->
-        <div id="mobile-menu" class="hidden md:hidden border-t border-gray-200 dark:border-gray-700">
+        <div id="mobile-menu" class="hidden md:hidden border-t border-navy-200 dark:border-navy-700">
             <div class="px-4 py-4 space-y-3">
-                <a href="/" class="block text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400">Home</a>
-                <a href="#frameworks" class="block text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400">Frameworks</a>
-                <a href="#about" class="block text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400">About</a>
-                <div class="pt-2 border-t border-gray-200 dark:border-gray-700">
+                <a href="/" class="block text-navy-700 dark:text-cream-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium">Home</a>
+                <a href="#frameworks" class="block text-navy-700 dark:text-cream-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium">Frameworks</a>
+                <a href="#about" class="block text-navy-700 dark:text-cream-300 hover:text-primary-600 dark:hover:text-primary-400 font-medium">About</a>
+                <div class="pt-2 border-t border-navy-200 dark:border-navy-700">
                     <button id="mobile-login-btn" class="w-full btn-secondary mb-2">Login</button>
                     <button id="mobile-signup-btn" class="w-full btn-primary">Sign Up</button>
                 </div>
@@ -78,14 +83,14 @@
     </nav>
 
     <!-- Hero Section -->
-    <section class="bg-gradient-to-br from-primary-50 to-blue-100 dark:from-gray-800 dark:to-gray-900 py-20">
+    <section class="bg-gradient-to-br from-primary-100 via-cream-100 to-primary-50 dark:from-navy-800 dark:to-navy-900 py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
-                <h1 class="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
+                <h1 class="text-4xl md:text-6xl font-bold font-display text-navy-900 dark:text-cream-50 mb-6">
                     Design Frameworks for
                     <span class="text-primary-600 dark:text-primary-400">Sense-Making</span>
                 </h1>
-                <p class="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
+                <p class="text-xl text-navy-600 dark:text-cream-300 mb-8 max-w-3xl mx-auto">
                     Interactive platform inspired by Vijay Kumar's 101 Design Methods. Guide your team through structured design thinking processes, from problem definition to strategic solutions.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
@@ -111,39 +116,39 @@
             <div class="grid md:grid-cols-3 gap-8">
                 <!-- Upload Files -->
                 <div class="card">
-                    <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-12 h-12 bg-primary-200 dark:bg-primary-900 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-navy-900 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-semibold mb-2">Upload Files</h3>
-                    <p class="text-gray-600 dark:text-gray-400">
+                    <h3 class="text-xl font-bold font-display mb-2 text-navy-900 dark:text-cream-50">Upload Files</h3>
+                    <p class="text-navy-600 dark:text-cream-400">
                         Upload documents, images, or data to automatically populate framework sections with relevant information.
                     </p>
                 </div>
                 
                 <!-- Chat with AI -->
                 <div class="card">
-                    <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-12 h-12 bg-primary-200 dark:bg-primary-900 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-navy-900 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-semibold mb-2">Chat with AI</h3>
-                    <p class="text-gray-600 dark:text-gray-400">
+                    <h3 class="text-xl font-bold font-display mb-2 text-navy-900 dark:text-cream-50">Chat with AI</h3>
+                    <p class="text-navy-600 dark:text-cream-400">
                         Leverage AI assistance to answer questions, conduct secondary research, and generate framework content.
                     </p>
                 </div>
                 
                 <!-- Guided Steps -->
                 <div class="card">
-                    <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-12 h-12 bg-primary-200 dark:bg-primary-900 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-navy-900 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-semibold mb-2">Guided Steps</h3>
-                    <p class="text-gray-600 dark:text-gray-400">
+                    <h3 class="text-xl font-bold font-display mb-2 text-navy-900 dark:text-cream-50">Guided Steps</h3>
+                    <p class="text-navy-600 dark:text-cream-400">
                         Follow detailed instructions and best practices to manually complete frameworks with your team.
                     </p>
                 </div>
@@ -152,7 +157,7 @@
     </section>
 
     <!-- Framework Categories Section -->
-    <section id="frameworks" class="py-20 bg-gray-50 dark:bg-gray-800">
+    <section id="frameworks" class="py-20 bg-white dark:bg-navy-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
                 <h2 class="section-title">Framework Categories</h2>
@@ -179,40 +184,40 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-gray-300 py-12">
+    <footer class="bg-navy-900 text-cream-300 py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid md:grid-cols-4 gap-8">
                 <div>
-                    <h3 class="text-white text-lg font-semibold mb-4">MPAP Frameworks</h3>
+                    <h3 class="text-cream-50 text-lg font-bold font-display mb-4">MPAP Frameworks</h3>
                     <p class="text-sm">
                         Structured sense-making for design teams, inspired by Vijay Kumar's 101 Design Methods.
                     </p>
                 </div>
                 <div>
-                    <h4 class="text-white font-semibold mb-4">Product</h4>
+                    <h4 class="text-cream-50 font-bold mb-4">Product</h4>
                     <ul class="space-y-2 text-sm">
-                        <li><a href="#frameworks" class="hover:text-white transition-colors">Frameworks</a></li>
-                        <li><a href="#about" class="hover:text-white transition-colors">About</a></li>
-                        <li><a href="/" class="hover:text-white transition-colors">Home</a></li>
+                        <li><a href="#frameworks" class="hover:text-primary-400 transition-colors">Frameworks</a></li>
+                        <li><a href="#about" class="hover:text-primary-400 transition-colors">About</a></li>
+                        <li><a href="/" class="hover:text-primary-400 transition-colors">Home</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-white font-semibold mb-4">Resources</h4>
+                    <h4 class="text-cream-50 font-bold mb-4">Resources</h4>
                     <ul class="space-y-2 text-sm">
-                        <li><a href="#" class="hover:text-white transition-colors">Documentation</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Blog</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Support</a></li>
+                        <li><a href="#" class="hover:text-primary-400 transition-colors">Documentation</a></li>
+                        <li><a href="#" class="hover:text-primary-400 transition-colors">Blog</a></li>
+                        <li><a href="#" class="hover:text-primary-400 transition-colors">Support</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-white font-semibold mb-4">Legal</h4>
+                    <h4 class="text-cream-50 font-bold mb-4">Legal</h4>
                     <ul class="space-y-2 text-sm">
-                        <li><a href="#" class="hover:text-white transition-colors">Privacy Policy</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Terms of Service</a></li>
+                        <li><a href="#" class="hover:text-primary-400 transition-colors">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-primary-400 transition-colors">Terms of Service</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="mt-8 pt-8 border-t border-gray-800 text-center text-sm">
+            <div class="mt-8 pt-8 border-t border-navy-700 text-center text-sm">
                 <p>&copy; 2025 MPAP Frameworks. All rights reserved.</p>
             </div>
         </div>
@@ -220,10 +225,10 @@
 
     <!-- Login Modal -->
     <div id="login-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full p-6">
+        <div class="bg-white dark:bg-navy-800 rounded-xl shadow-xl max-w-md w-full p-6 border border-navy-200 dark:border-navy-700">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Log In</h2>
-                <button data-close-modal="login-modal" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                <h2 class="text-2xl font-bold font-display text-navy-900 dark:text-cream-50">Log In</h2>
+                <button data-close-modal="login-modal" class="text-navy-500 hover:text-navy-700 dark:text-cream-400 dark:hover:text-cream-200">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                     </svg>
@@ -234,12 +239,12 @@
             
             <form id="login-form" class="space-y-4">
                 <div>
-                    <label for="login-email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
+                    <label for="login-email" class="block text-sm font-semibold text-navy-700 dark:text-cream-300 mb-1">Email</label>
                     <input type="email" id="login-email" required class="input-field" placeholder="you@example.com">
                 </div>
                 
                 <div>
-                    <label for="login-password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
+                    <label for="login-password" class="block text-sm font-semibold text-navy-700 dark:text-cream-300 mb-1">Password</label>
                     <input type="password" id="login-password" required class="input-field" placeholder="••••••••">
                 </div>
                 
@@ -257,10 +262,10 @@
 
     <!-- Signup Modal -->
     <div id="signup-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full p-6">
+        <div class="bg-white dark:bg-navy-800 rounded-xl shadow-xl max-w-md w-full p-6 border border-navy-200 dark:border-navy-700">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Sign Up</h2>
-                <button data-close-modal="signup-modal" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                <h2 class="text-2xl font-bold font-display text-navy-900 dark:text-cream-50">Sign Up</h2>
+                <button data-close-modal="signup-modal" class="text-navy-500 hover:text-navy-700 dark:text-cream-400 dark:hover:text-cream-200">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                     </svg>
@@ -271,23 +276,23 @@
             
             <form id="signup-form" class="space-y-4">
                 <div>
-                    <label for="signup-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Full Name</label>
+                    <label for="signup-name" class="block text-sm font-semibold text-navy-700 dark:text-cream-300 mb-1">Full Name</label>
                     <input type="text" id="signup-name" required class="input-field" placeholder="John Doe">
                 </div>
                 
                 <div>
-                    <label for="signup-email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
+                    <label for="signup-email" class="block text-sm font-semibold text-navy-700 dark:text-cream-300 mb-1">Email</label>
                     <input type="email" id="signup-email" required class="input-field" placeholder="you@example.com">
                 </div>
                 
                 <div>
-                    <label for="signup-password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
+                    <label for="signup-password" class="block text-sm font-semibold text-navy-700 dark:text-cream-300 mb-1">Password</label>
                     <input type="password" id="signup-password" required minlength="6" class="input-field" placeholder="••••••••">
-                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">At least 6 characters</p>
+                    <p class="mt-1 text-xs text-navy-500 dark:text-cream-400">At least 6 characters</p>
                 </div>
                 
                 <div>
-                    <label for="signup-confirm-password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Confirm Password</label>
+                    <label for="signup-confirm-password" class="block text-sm font-semibold text-navy-700 dark:text-cream-300 mb-1">Confirm Password</label>
                     <input type="password" id="signup-confirm-password" required minlength="6" class="input-field" placeholder="••••••••">
                 </div>
                 

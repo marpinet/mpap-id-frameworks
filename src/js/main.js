@@ -109,17 +109,16 @@ if (categoriesContainer) {
         categoryCard.innerHTML = `
             <div class="flex items-start justify-between mb-4">
                 <div class="flex-1">
-                    <h3 class="text-2xl font-bold mb-2">${index + 1}. ${category.title}</h3>
-                    <p class="text-gray-600 dark:text-gray-400 mb-4">${category.description}</p>
+                    <h3 class="text-2xl font-bold font-display mb-2 text-navy-900 dark:text-cream-50">${index + 1}. ${category.title}</h3>
+                    <p class="text-navy-600 dark:text-cream-400 mb-4">${category.description}</p>
                 </div>
             </div>
             <div class="flex flex-wrap gap-2">
                 ${category.frameworks.map(fw => `
                     <a href="/framework.html?id=${fw.slug}" 
-                       class="inline-block px-4 py-2 bg-${category.color}-100 dark:bg-${category.color}-900 
-                              text-${category.color}-700 dark:text-${category.color}-300 rounded-lg 
-                              hover:bg-${category.color}-200 dark:hover:bg-${category.color}-800 
-                              transition-colors text-sm font-medium">
+                       class="inline-block px-4 py-3 bg-primary-400 hover:bg-primary-500 
+                              text-navy-900 rounded-lg font-semibold
+                              transition-all duration-200 shadow-sm hover:shadow-md">
                         ${fw.name}
                     </a>
                 `).join('')}

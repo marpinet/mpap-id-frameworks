@@ -43,15 +43,53 @@ export function updateAuthUI(user) {
     }
 }
 
+// Improved error messages mapping
+function getUserFriendlyError(error) {
+    const message = error?.message || error || 'An error occurred';
+    
+    // Map common Supabase errors to user-friendly messages
+    const errorMappings = {
+        'Invalid login credentials': 'Incorrect email or password. Please try again.',
+        'User already registered': 'An account with this email already exists. Try logging in instead.',
+        'Email not confirmed': 'Please check your email and confirm your account before logging in.',
+        'Invalid email': 'Please enter a valid email address.',
+        'Password should be at least 6 characters': 'Your password must be at least 6 characters long.',
+        'Unable to validate email address: invalid format': 'Please enter a valid email address.',
+        'Email rate limit exceeded': 'Too many attempts. Please wait a few minutes and try again.',
+        'For security purposes, you can only request this once every 60 seconds': 'Please wait a minute before trying again.',
+    };
+    
+    // Check if message contains any of our mapped errors
+    for (const [key, value] of Object.entries(errorMappings)) {
+        if (message.includes(key)) {
+            return value;
+        }
+    }
+    
+    // Return original message if no mapping found
+    return message;
+}
+
 // Show error message
-export function showError(message, containerId = 'error-message') {
+export function showError(error, containerId = 'error-message') {
     const errorContainer = document.getElementById(containerId);
+    const friendlyMessage = getUserFriendlyError(error);
+    
     if (errorContainer) {
-        errorContainer.textContent = message;
-        errorContainer.classList.remove('hidden');
-        setTimeout(() => {
-            errorContainer.classList.add('hidden');
-        }, 5000);
+        // Handle both inline errors and toast notifications
+        if (containerId.includes('error') && !containerId.includes('message')) {
+            // Inline error (in forms)
+            errorContainer.textContent = friendlyMessage;
+            errorContainer.classList.remove('hidden');
+        } else {
+            // Toast notification
+            const span = errorContainer.querySelector('span') || errorContainer;
+            span.textContent = friendlyMessage;
+            errorContainer.classList.remove('hidden');
+            setTimeout(() => {
+                errorContainer.classList.add('hidden');
+            }, 5000);
+        }
     }
 }
 
@@ -59,11 +97,12 @@ export function showError(message, containerId = 'error-message') {
 export function showSuccess(message, containerId = 'success-message') {
     const successContainer = document.getElementById(containerId);
     if (successContainer) {
-        successContainer.textContent = message;
+        const span = successContainer.querySelector('span') || successContainer;
+        span.textContent = message;
         successContainer.classList.remove('hidden');
         setTimeout(() => {
             successContainer.classList.add('hidden');
-        }, 3000);
+        }, 4000);
     }
 }
 
@@ -166,6 +205,38 @@ export async function handleLogout() {
     }
 }
 
+// Handle forgot password
+export async function handleForgotPassword(event) {
+    event.preventDefault();
+    
+    const email = document.getElementById('forgot-password-email').value;
+    const submitButton = event.target.querySelector('button[type="submit"]');
+    const originalButtonText = submitButton.textContent;
+    
+    // Disable button and show loading state
+    submitButton.disabled = true;
+    submitButton.textContent = 'Sending...';
+    
+    try {
+        const { error } = await auth.resetPassword(email);
+        
+        if (error) throw error;
+        
+        // Success!
+        modal.close('forgot-password-modal');
+        showSuccess('Password reset link sent! Check your email.');
+        
+        // Reset form
+        event.target.reset();
+        
+    } catch (error) {
+        showError(error.message, 'forgot-password-error');
+    } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = originalButtonText;
+    }
+}
+
 // Initialize auth listeners
 export function initializeAuth() {
     // Listen to auth state changes
@@ -238,4 +309,24 @@ export function initializeAuth() {
         modal.close('signup-modal');
         modal.open('login-modal');
     });
+    
+    // Forgot password link
+    const forgotPasswordLink = document.getElementById('forgot-password-link');
+    forgotPasswordLink?.addEventListener('click', (e) => {
+        e.preventDefault();
+        modal.close('login-modal');
+        modal.open('forgot-password-modal');
+    });
+    
+    // Back to login from forgot password
+    const backToLogin = document.getElementById('back-to-login');
+    backToLogin?.addEventListener('click', (e) => {
+        e.preventDefault();
+        modal.close('forgot-password-modal');
+        modal.open('login-modal');
+    });
+    
+    // Forgot password form
+    const forgotPasswordForm = document.getElementById('forgot-password-form');
+    forgotPasswordForm?.addEventListener('submit', handleForgotPassword);
 }

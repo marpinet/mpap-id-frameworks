@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Manage all your framework projects in one place">
+    <title>My Projects - MPAP Frameworks</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="stylesheet" href="/src/styles/main.css">
+</head>
+<body class="min-h-screen bg-cream-50 dark:bg-navy-900">
+    <!-- Navigation -->
+    <nav class="bg-white dark:bg-navy-800 shadow-sm border-b border-navy-200 dark:border-navy-700 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-8">
+                    <a href="/" class="text-2xl font-bold font-display text-primary-600 dark:text-primary-400">
+                        MPAP Frameworks
+                    </a>
+                    <div class="hidden md:flex items-center space-x-6">
+                        <a href="/#frameworks" class="text-navy-600 dark:text-cream-400 hover:text-primary-600 dark:hover:text-primary-400 font-medium">Frameworks</a>
+                        <a href="/projects.html" class="text-primary-600 dark:text-primary-400 font-semibold border-b-2 border-primary-600">My Projects</a>
+                        <a href="/profile.html" class="text-navy-600 dark:text-cream-400 hover:text-primary-600 dark:hover:text-primary-400 font-medium">Profile</a>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <button id="theme-toggle" class="p-2 rounded-lg hover:bg-cream-100 dark:hover:bg-navy-700 transition-colors" aria-label="Toggle theme">
+                        <svg class="w-5 h-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/>
+                        </svg>
+                        <svg class="w-5 h-5 dark:hidden" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+                        </svg>
+                    </button>
+                    <div id="user-menu" class="hidden">
+                        <!-- User menu populated by JS -->
+                    </div>
+                    <div id="auth-buttons" class="space-x-2">
+                        <!-- Auth buttons populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold font-display text-navy-900 dark:text-cream-50 mb-2">My Projects</h1>
+            <p class="text-lg text-navy-600 dark:text-cream-400">Manage and organize all your framework projects</p>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="bg-white dark:bg-navy-800 rounded-xl shadow-md p-4 mb-6">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
+                <!-- Search -->
+                <div class="flex-1 max-w-md">
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            id="search-projects" 
+                            placeholder="Search projects..." 
+                            class="input-field pl-10"
+                        >
+                        <svg class="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Filters & Actions -->
+                <div class="flex flex-wrap items-center gap-3">
+                    <select id="filter-framework" class="input-field py-2 px-3 pr-8">
+                        <option value="">All Frameworks</option>
+                        <option value="strategy">Strategy & Planning</option>
+                        <option value="research">Research & Analysis</option>
+                        <option value="design">Design & Mapping</option>
+                        <option value="execution">Execution & Delivery</option>
+                        <option value="business">Business & Innovation</option>
+                    </select>
+
+                    <select id="filter-status" class="input-field py-2 px-3 pr-8">
+                        <option value="">All Status</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="completed">Completed</option>
+                        <option value="draft">Draft</option>
+                    </select>
+
+                    <select id="sort-by" class="input-field py-2 px-3 pr-8">
+                        <option value="recent">Recently Modified</option>
+                        <option value="name">Name (A-Z)</option>
+                        <option value="created">Date Created</option>
+                        <option value="completion">Completion %</option>
+                    </select>
+
+                    <button id="new-project-btn" class="btn-primary flex items-center space-x-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        <span>New Project</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bulk Actions (hidden by default) -->
+            <div id="bulk-actions" class="hidden mt-4 pt-4 border-t border-navy-200 dark:border-navy-700">
+                <div class="flex items-center justify-between">
+                    <span class="text-sm text-navy-600 dark:text-cream-400">
+                        <span id="selected-count">0</span> projects selected
+                    </span>
+                    <div class="flex items-center space-x-3">
+                        <button id="bulk-delete-btn" class="text-sm text-red-600 hover:text-red-700 dark:text-red-400 font-medium">Delete</button>
+                        <button id="bulk-export-btn" class="text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400 font-medium">Export</button>
+                        <button id="cancel-selection-btn" class="text-sm text-navy-600 hover:text-navy-700 dark:text-cream-400 font-medium">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Projects Grid -->
+        <div id="projects-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Projects will be populated by JS -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="hidden text-center py-16">
+            <div class="mb-6">
+                <svg class="mx-auto h-24 w-24 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-navy-900 dark:text-cream-50 mb-2">No projects yet</h3>
+            <p class="text-navy-600 dark:text-cream-400 mb-6">Start creating your first framework project</p>
+            <a href="/#frameworks" class="btn-primary inline-block">Browse Frameworks</a>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading-state" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Loading skeletons -->
+            <div class="card animate-pulse">
+                <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-4"></div>
+                <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-6"></div>
+                <div class="h-20 bg-gray-200 dark:bg-gray-700 rounded mb-4"></div>
+                <div class="h-8 bg-gray-200 dark:bg-gray-700 rounded"></div>
+            </div>
+            <div class="card animate-pulse">
+                <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-4"></div>
+                <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-6"></div>
+                <div class="h-20 bg-gray-200 dark:bg-gray-700 rounded mb-4"></div>
+                <div class="h-8 bg-gray-200 dark:bg-gray-700 rounded"></div>
+            </div>
+            <div class="card animate-pulse">
+                <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-4"></div>
+                <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-6"></div>
+                <div class="h-20 bg-gray-200 dark:bg-gray-700 rounded mb-4"></div>
+                <div class="h-8 bg-gray-200 dark:bg-gray-700 rounded"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- New Project Modal -->
+    <div id="new-project-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-navy-800 rounded-xl shadow-xl max-w-md w-full p-6">
+            <h3 class="text-xl font-bold font-display text-navy-900 dark:text-cream-50 mb-4">Create New Project</h3>
+            <div class="space-y-4">
+                <div>
+                    <label for="project-name" class="block text-sm font-medium text-navy-700 dark:text-cream-300 mb-1">Project Name</label>
+                    <input type="text" id="project-name" class="input-field" placeholder="My Project Name">
+                </div>
+                <div>
+                    <label for="project-framework" class="block text-sm font-medium text-navy-700 dark:text-cream-300 mb-1">Select Framework</label>
+                    <select id="project-framework" class="input-field">
+                        <option value="">Choose a framework...</option>
+                        <!-- Options populated by JS -->
+                    </select>
+                </div>
+            </div>
+            <div class="flex space-x-3 mt-6">
+                <button data-close-modal="new-project-modal" class="btn-secondary flex-1">Cancel</button>
+                <button id="create-project-btn" class="btn-primary flex-1">Create Project</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-navy-800 rounded-xl shadow-xl max-w-md w-full p-6">
+            <div class="mb-4">
+                <svg class="mx-auto h-12 w-12 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+            </div>
+            <h3 class="text-xl font-bold text-navy-900 dark:text-cream-50 mb-2 text-center">Delete Project?</h3>
+            <p class="text-navy-600 dark:text-cream-400 mb-6 text-center">This action cannot be undone. All data will be permanently deleted.</p>
+            <div class="flex space-x-3">
+                <button data-close-modal="delete-modal" class="btn-secondary flex-1">Cancel</button>
+                <button id="confirm-delete-btn" class="flex-1 px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-all">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/src/js/projects.js"></script>
+</body>
+</html>

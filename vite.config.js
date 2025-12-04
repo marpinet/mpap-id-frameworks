@@ -11,6 +11,7 @@ export default defineConfig({
         main: resolve(__dirname, 'index.html'),
         framework: resolve(__dirname, 'framework.html'),
         profile: resolve(__dirname, 'profile.html'),
+        projects: resolve(__dirname, 'projects.html'),
       },
     },
   },

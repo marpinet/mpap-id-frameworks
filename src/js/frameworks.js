@@ -805,3 +805,53 @@ export function getAllFrameworks() {
 export function getFrameworksByCategory(category) {
     return getAllFrameworks().filter(fw => fw.category === category);
 }
+
+// Framework Categories for UI
+export const frameworkCategories = [
+    {
+        name: "Strategy & Planning",
+        icon: "📋",
+        frameworks: [
+            { id: "project-charter", name: "Project Charter", icon: "📋" },
+            { id: "project-brief", name: "Project Brief", icon: "📝" },
+            { id: "strategic-purpose", name: "Strategic Purpose", icon: "🎯" },
+            { id: "strategic-roadmap", name: "Strategic Roadmap", icon: "🛣️" }
+        ]
+    },
+    {
+        name: "Business & Innovation",
+        icon: "💼",
+        frameworks: [
+            { id: "canvas-business-plan", name: "Canvas Business Plan", icon: "💼" },
+            { id: "company-background", name: "Company Background", icon: "🏢" }
+        ]
+    },
+    {
+        name: "Research & Analysis",
+        icon: "🔬",
+        frameworks: [
+            { id: "resource-based-analysis", name: "Resource-Based Analysis", icon: "💎" },
+            { id: "market-segmentation", name: "Market Segmentation", icon: "📊" },
+            { id: "competitor-mapping", name: "Competitor Mapping", icon: "⚔️" },
+            { id: "synthesize-research", name: "Synthesize Research", icon: "🔬" }
+        ]
+    },
+    {
+        name: "Design & Mapping",
+        icon: "🗺️",
+        frameworks: [
+            { id: "system-mapping", name: "System Mapping", icon: "🌐" },
+            { id: "stakeholder-mapping", name: "Stakeholder Mapping", icon: "👥" },
+            { id: "power-dynamics-mapping", name: "Power Dynamics Mapping", icon: "⚡" },
+            { id: "journey-mapping", name: "Journey Mapping", icon: "🗺️" },
+            { id: "translating-themes-to-opportunity-spaces", name: "Translating Themes to Opportunities", icon: "💡" }
+        ]
+    },
+    {
+        name: "Execution & Delivery",
+        icon: "🎯",
+        frameworks: [
+            { id: "leverage-points-and-interventions", name: "Leverage Points & Interventions", icon: "🎚️" }
+        ]
+    }
+];

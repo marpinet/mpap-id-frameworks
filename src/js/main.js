@@ -17,6 +17,15 @@ import { initializeAuth } from './auth.js';
 // Initialize authentication system
 initializeAuth();
 
+// Show/hide Projects link based on auth status
+(async () => {
+    const { user } = await auth.getUser();
+    const projectsLink = document.getElementById('projects-nav-link');
+    if (projectsLink && user) {
+        projectsLink.classList.remove('hidden');
+    }
+})();
+
 // Theme Toggle
 const themeToggle = document.getElementById('theme-toggle');
 const html = document.documentElement;

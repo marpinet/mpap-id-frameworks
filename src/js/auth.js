@@ -188,7 +188,7 @@ export function initializeAuth() {
         btn?.addEventListener('click', () => modal.open('login-modal'));
     });
     
-    const signupButtons = document.querySelectorAll('#signup-btn, #mobile-signup-btn');
+    const signupButtons = document.querySelectorAll('#signup-btn, #mobile-signup-btn, #cta-signup-btn');
     signupButtons.forEach(btn => {
         btn?.addEventListener('click', () => modal.open('signup-modal'));
     });

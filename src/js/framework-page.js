@@ -9,6 +9,7 @@ const frameworkId = urlParams.get('id');
 let currentFramework = null;
 let frameworkData = {};
 let currentUser = null;
+let currentStepIndex = 0;
 
 // Initialize page
 async function initializePage() {
@@ -41,48 +42,321 @@ async function initializePage() {
     document.getElementById('framework-description').textContent = currentFramework.description;
     document.title = `${currentFramework.name} - MPAP Frameworks`;
     
-    // Render framework sections
-    renderFrameworkSections();
-    
     // Load saved data if user is logged in
     if (currentUser) {
         await loadSavedFramework();
+    } else {
+        // Load from localStorage if not logged in
+        loadFromLocalStorage();
+    }
+    
+    // Initialize step-by-step guided experience
+    initializeStepByStep();
+    renderCurrentStep();
+}
+
+// Initialize step-by-step guided experience
+function initializeStepByStep() {
+    const totalSteps = currentFramework.sections.length;
+    
+    // Initialize progress dots
+    const progressDots = document.getElementById('progress-dots');
+    progressDots.innerHTML = '';
+    
+    currentFramework.sections.forEach((section, index) => {
+        const dot = document.createElement('div');
+        dot.className = 'flex flex-col items-center';
+        dot.innerHTML = `
+            <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold transition-all duration-300 ${
+                index === 0 ? 'bg-primary-500 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
+            }" data-step="${index}">
+                ${index + 1}
+            </div>
+            <span class="text-xs text-gray-500 dark:text-gray-400 mt-1 hidden sm:block max-w-[80px] text-center truncate">${section.title}</span>
+        `;
+        progressDots.appendChild(dot);
+    });
+    
+    // Setup navigation buttons
+    const prevBtn = document.getElementById('prev-step-btn');
+    const nextBtn = document.getElementById('next-step-btn');
+    const skipBtn = document.getElementById('skip-step-btn');
+    
+    prevBtn.addEventListener('click', () => {
+        if (currentStepIndex > 0) {
+            saveCurrentStepData();
+            currentStepIndex--;
+            renderCurrentStep();
+        }
+    });
+    
+    nextBtn.addEventListener('click', () => {
+        saveCurrentStepData();
+        if (currentStepIndex < totalSteps - 1) {
+            currentStepIndex++;
+            renderCurrentStep();
+        } else {
+            // Last step completed
+            completeFramework();
+        }
+    });
+    
+    skipBtn.addEventListener('click', () => {
+        if (currentStepIndex < totalSteps - 1) {
+            currentStepIndex++;
+            renderCurrentStep();
+        }
+    });
+}
+
+// Render current step
+function renderCurrentStep() {
+    const section = currentFramework.sections[currentStepIndex];
+    const totalSteps = currentFramework.sections.length;
+    const isLastStep = currentStepIndex === totalSteps - 1;
+    
+    // Update progress bar and text
+    const progressPercent = ((currentStepIndex + 1) / totalSteps) * 100;
+    document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+    document.getElementById('progress-text').textContent = `Step ${currentStepIndex + 1} of ${totalSteps}`;
+    
+    // Update progress dots
+    document.querySelectorAll('#progress-dots [data-step]').forEach((dot, index) => {
+        if (index < currentStepIndex) {
+            // Completed
+            dot.className = 'w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold transition-all duration-300 bg-green-500 text-white';
+            dot.innerHTML = '<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>';
+        } else if (index === currentStepIndex) {
+            // Current
+            dot.className = 'w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold transition-all duration-300 bg-primary-500 text-white ring-4 ring-primary-200 dark:ring-primary-900';
+            dot.textContent = index + 1;
+        } else {
+            // Upcoming
+            dot.className = 'w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold transition-all duration-300 bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400';
+            dot.textContent = index + 1;
+        }
+    });
+    
+    // Render step content with encouraging instructions
+    const stepContainer = document.getElementById('step-container');
+    stepContainer.innerHTML = `
+        <div class="card">
+            <div class="mb-6">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex-1">
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2 font-display">
+                            ${section.title}
+                        </h2>
+                        <p class="text-gray-600 dark:text-gray-400">${section.description}</p>
+                    </div>
+                    <span class="text-4xl ml-4">${currentFramework.icon}</span>
+                </div>
+                
+                <!-- Encouraging Instructions -->
+                <div class="bg-primary-50 dark:bg-primary-900/20 border-l-4 border-primary-500 p-4 rounded-r-lg mb-6">
+                    <div class="flex items-start space-x-3">
+                        <svg class="w-6 h-6 text-primary-600 dark:text-primary-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-primary-900 dark:text-primary-100 mb-1">How to complete this step:</h4>
+                            <div class="text-sm text-primary-800 dark:text-primary-200 space-y-2">
+                                ${generateStepInstructions(section)}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Input Area -->
+            <div>
+                <label for="current-step-input" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Your Response
+                </label>
+                <textarea 
+                    id="current-step-input"
+                    rows="8" 
+                    class="input-field resize-y font-sans"
+                    placeholder="${section.placeholder}"
+                >${frameworkData[section.id] || ''}</textarea>
+                <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                    💡 Tip: Be specific and detailed. You can always come back to edit this later.
+                </p>
+            </div>
+            
+            ${frameworkData[section.id] ? `
+            <div class="mt-4 flex items-center space-x-2 text-sm text-green-600 dark:text-green-400">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                </svg>
+                <span>Great work! This section has content.</span>
+            </div>
+            ` : ''}
+        </div>
+    `;
+    
+    // Update navigation buttons
+    const prevBtn = document.getElementById('prev-step-btn');
+    const nextBtn = document.getElementById('next-step-btn');
+    const skipBtn = document.getElementById('skip-step-btn');
+    
+    prevBtn.disabled = currentStepIndex === 0;
+    if (currentStepIndex === 0) {
+        prevBtn.classList.add('opacity-50', 'cursor-not-allowed');
+    } else {
+        prevBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+    }
+    
+    if (isLastStep) {
+        nextBtn.querySelector('span').textContent = 'Complete Framework';
+        nextBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+        nextBtn.classList.remove('bg-primary-500', 'hover:bg-primary-600');
+        skipBtn.classList.add('hidden');
+    } else {
+        nextBtn.querySelector('span').textContent = 'Next';
+        nextBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
+        nextBtn.classList.add('bg-primary-500', 'hover:bg-primary-600');
+        skipBtn.classList.remove('hidden');
+    }
+    
+    // Setup auto-save for current step
+    const textarea = document.getElementById('current-step-input');
+    textarea.addEventListener('input', (e) => {
+        frameworkData[section.id] = e.target.value;
+        saveToLocalStorage();
+    });
+}
+
+// Generate context-aware instructions for each step
+function generateStepInstructions(section) {
+    const instructions = {
+        'objective': `
+            <p>• Start by clearly stating what you want to achieve with this project</p>
+            <p>• Make it specific, measurable, and time-bound if possible</p>
+            <p>• Think about the end result you envision</p>
+        `,
+        'scope': `
+            <p>• Define what's included and what's excluded from this project</p>
+            <p>• Be clear about boundaries to prevent scope creep</p>
+            <p>• List specific deliverables or outcomes</p>
+        `,
+        'stakeholders': `
+            <p>• Identify all people or groups affected by or involved in this project</p>
+            <p>• Include both internal team members and external parties</p>
+            <p>• Consider who has influence and who will be impacted</p>
+        `,
+        'timeline': `
+            <p>• Break down the project into key phases or milestones</p>
+            <p>• Assign realistic timeframes to each phase</p>
+            <p>• Include buffer time for unexpected challenges</p>
+        `,
+        'resources': `
+            <p>• List what you'll need: people, budget, tools, technology</p>
+            <p>• Be honest about resource constraints</p>
+            <p>• Identify any gaps that need to be filled</p>
+        `,
+        'risks': `
+            <p>• Think about what could go wrong or create obstacles</p>
+            <p>• Consider internal and external risk factors</p>
+            <p>• For each risk, note how you might mitigate it</p>
+        `,
+        'success': `
+            <p>• Define how you'll measure success</p>
+            <p>• Include both quantitative metrics and qualitative outcomes</p>
+            <p>• Make criteria specific and observable</p>
+        `
+    };
+    
+    // Return matching instructions or default
+    const sectionId = section.id.toLowerCase();
+    for (const [key, instruction] of Object.entries(instructions)) {
+        if (sectionId.includes(key)) {
+            return instruction;
+        }
+    }
+    
+    // Default instructions
+    return `
+        <p>• Take your time to think through this section carefully</p>
+        <p>• Provide as much detail as possible to make your framework useful</p>
+        <p>• You can always return to edit or expand on this later</p>
+    `;
+}
+
+// Save current step data
+function saveCurrentStepData() {
+    const section = currentFramework.sections[currentStepIndex];
+    const textarea = document.getElementById('current-step-input');
+    if (textarea) {
+        frameworkData[section.id] = textarea.value;
+        saveToLocalStorage();
     }
 }
 
-// Render framework sections
-function renderFrameworkSections() {
-    const sectionsContainer = document.getElementById('framework-sections');
-    sectionsContainer.innerHTML = '';
+// Complete framework
+function completeFramework() {
+    saveCurrentStepData();
     
-    currentFramework.sections.forEach((section, index) => {
-        const sectionEl = document.createElement('div');
-        sectionEl.className = 'card';
-        sectionEl.innerHTML = `
-            <div class="mb-4">
-                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                    ${index + 1}. ${section.title}
-                </h3>
-                <p class="text-sm text-gray-600 dark:text-gray-400">${section.description}</p>
+    // Show completion message
+    const stepContainer = document.getElementById('step-container');
+    stepContainer.innerHTML = `
+        <div class="card text-center py-12">
+            <div class="mb-6">
+                <div class="mx-auto w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mb-4">
+                    <svg class="w-12 h-12 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-3 font-display">
+                    🎉 Framework Complete!
+                </h2>
+                <p class="text-lg text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
+                    Congratulations! You've completed all ${currentFramework.sections.length} sections of the ${currentFramework.name}. 
+                    ${currentUser ? 'Your work is automatically saved to your profile.' : 'Sign in to save your work permanently.'}
+                </p>
             </div>
-            <textarea 
-                id="section-${section.id}" 
-                data-section-id="${section.id}"
-                rows="6" 
-                class="input-field resize-y"
-                placeholder="${section.placeholder}"
-            >${frameworkData[section.id] || ''}</textarea>
-        `;
-        sectionsContainer.appendChild(sectionEl);
-        
-        // Add auto-save on change
-        const textarea = sectionEl.querySelector('textarea');
-        textarea.addEventListener('input', (e) => {
-            frameworkData[section.id] = e.target.value;
-            // Auto-save to localStorage
-            saveToLocalStorage();
-        });
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <button id="review-all-btn" class="btn-secondary">
+                    Review All Sections
+                </button>
+                ${currentUser ? `
+                    <a href="/profile.html" class="btn-primary">
+                        View in Profile
+                    </a>
+                ` : `
+                    <button id="save-signup-btn" class="btn-primary">
+                        Sign Up to Save
+                    </button>
+                `}
+                <button id="export-complete-btn" class="btn-secondary">
+                    Export as PDF
+                </button>
+            </div>
+        </div>
+    `;
+    
+    // Hide navigation buttons
+    document.getElementById('prev-step-btn').classList.add('hidden');
+    document.getElementById('next-step-btn').classList.add('hidden');
+    document.getElementById('skip-step-btn').classList.add('hidden');
+    
+    // Setup review button
+    document.getElementById('review-all-btn')?.addEventListener('click', () => {
+        currentStepIndex = 0;
+        document.getElementById('prev-step-btn').classList.remove('hidden');
+        document.getElementById('next-step-btn').classList.remove('hidden');
+        document.getElementById('skip-step-btn').classList.remove('hidden');
+        renderCurrentStep();
     });
+    
+    // Setup export button
+    document.getElementById('export-complete-btn')?.addEventListener('click', exportAsPDF);
+    
+    // Auto-save if logged in
+    if (currentUser) {
+        saveFramework();
+    }
 }
 
 // Save to localStorage (temporary storage)

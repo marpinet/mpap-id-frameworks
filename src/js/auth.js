@@ -64,7 +64,6 @@ function getUserFriendlyError(error) {
     const errorMappings = {
         'Invalid login credentials': 'Incorrect email or password. Please try again.',
         'User already registered': 'An account with this email already exists. Try logging in instead.',
-        'Email not confirmed': 'Please check your email and confirm your account before logging in.',
         'Invalid email': 'Please enter a valid email address.',
         'Password should be at least 6 characters': 'Your password must be at least 6 characters long.',
         'Unable to validate email address: invalid format': 'Please enter a valid email address.',
@@ -186,10 +185,15 @@ export async function handleSignup(event) {
         
         // Success!
         modal.close('signup-modal');
-        showSuccess('Account created! Please check your email to verify your account.');
+        showSuccess('🎉 Account created successfully! You\'re now logged in.');
         
         // Reset form
         event.target.reset();
+        
+        // Reload to update UI
+        setTimeout(() => {
+            window.location.reload();
+        }, 1000);
         
     } catch (error) {
         showError(error.message, 'signup-error');

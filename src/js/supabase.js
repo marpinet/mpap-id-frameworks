@@ -29,10 +29,25 @@ export const auth = {
                 password,
                 options: {
                     data: metadata,
+                    emailRedirectTo: window.location.origin,
                 },
             });
             
             if (error) throw error;
+            
+            // Auto sign in after signup (no email verification needed for demo)
+            if (data?.user) {
+                const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+                    email,
+                    password,
+                });
+                
+                if (signInError) {
+                    console.warn('Auto sign-in after signup failed:', signInError);
+                    // Still return successful signup even if auto sign-in fails
+                }
+            }
+            
             return { data, error: null };
         } catch (error) {
             console.error('Sign up error:', error);

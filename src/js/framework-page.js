@@ -362,6 +362,19 @@ function completeFramework() {
     // Setup export button
     document.getElementById('export-complete-btn')?.addEventListener('click', exportAsPDF);
     
+    // Setup sign up to save button
+    const saveSignupBtn = document.getElementById('save-signup-btn');
+    if (saveSignupBtn) {
+        saveSignupBtn.addEventListener('click', () => {
+            // Open signup modal
+            const signupModal = document.getElementById('signup-modal');
+            if (signupModal) {
+                signupModal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+        });
+    }
+    
     // Auto-save if logged in
     if (currentUser) {
         saveFramework();

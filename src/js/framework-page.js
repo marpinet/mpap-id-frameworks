@@ -304,7 +304,12 @@ function saveCurrentStepData() {
 
 // Complete framework
 function completeFramework() {
+    console.log('=== completeFramework called ===');
     saveCurrentStepData();
+    
+    const isLoggedIn = !!currentUser || localStorage.getItem('demoMode') === 'true';
+    console.log('User logged in:', isLoggedIn);
+    console.log('Current user:', currentUser);
     
     // Show completion message
     const stepContainer = document.getElementById('step-container');
@@ -321,7 +326,7 @@ function completeFramework() {
                 </h2>
                 <p class="text-lg text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
                     Congratulations! You've completed all ${currentFramework.sections.length} sections of the ${currentFramework.name}. 
-                    ${currentUser ? 'Your work is automatically saved to your profile.' : 'Sign in to save your work permanently.'}
+                    ${isLoggedIn ? 'Your work is automatically saved to your profile.' : 'Sign in to save your work permanently.'}
                 </p>
             </div>
             
@@ -329,12 +334,12 @@ function completeFramework() {
                 <button id="review-all-btn" class="btn-secondary">
                     Review All Sections
                 </button>
-                ${currentUser ? `
+                ${isLoggedIn ? `
                     <a href="/profile.html" class="btn-primary">
                         View in Profile
                     </a>
                 ` : `
-                    <button id="save-signup-btn" class="btn-primary">
+                    <button id="save-signup-btn" class="btn-primary" type="button">
                         Sign Up to Save
                     </button>
                 `}
@@ -344,6 +349,8 @@ function completeFramework() {
             </div>
         </div>
     `;
+    
+    console.log('Completion screen HTML inserted');
     
     // Hide navigation buttons
     document.getElementById('prev-step-btn').classList.add('hidden');
@@ -362,23 +369,50 @@ function completeFramework() {
     // Setup export button
     document.getElementById('export-complete-btn')?.addEventListener('click', exportAsPDF);
     
-    // Setup sign up to save button
+    // Setup sign up to save button with extensive logging
     const saveSignupBtn = document.getElementById('save-signup-btn');
+    console.log('Save signup button found:', saveSignupBtn);
+    console.log('Save signup button HTML:', saveSignupBtn ? saveSignupBtn.outerHTML : 'NULL');
+    
     if (saveSignupBtn) {
-        saveSignupBtn.addEventListener('click', () => {
-            // Open signup modal
+        console.log('✅ Sign Up to Save button found! Adding click listener...');
+        
+        // Remove any existing listeners by cloning
+        const newBtn = saveSignupBtn.cloneNode(true);
+        saveSignupBtn.parentNode.replaceChild(newBtn, saveSignupBtn);
+        
+        newBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('🔥 SIGN UP TO SAVE BUTTON CLICKED!');
+            
+            // Find and open signup modal
             const signupModal = document.getElementById('signup-modal');
+            console.log('Signup modal element:', signupModal);
+            
             if (signupModal) {
+                console.log('Opening signup modal...');
                 signupModal.classList.remove('hidden');
                 document.body.style.overflow = 'hidden';
+                console.log('Signup modal should be visible now');
+                console.log('Modal classes:', signupModal.className);
+            } else {
+                console.error('❌ Signup modal not found in DOM!');
             }
         });
+        
+        console.log('✅ Event listener attached to Sign Up to Save button');
+    } else {
+        console.error('❌ Save signup button NOT found in DOM!');
+        console.log('isLoggedIn status:', isLoggedIn);
     }
     
     // Auto-save if logged in
     if (currentUser) {
         saveFramework();
     }
+    
+    console.log('=== completeFramework setup complete ===');
 }
 
 // Save to localStorage (temporary storage)

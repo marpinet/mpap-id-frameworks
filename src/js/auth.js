@@ -376,6 +376,39 @@ export function initializeAuth() {
         enableDemoMode();
         modal.close('signup-modal');
     });
+    
+    // Use event delegation for dynamically created signup buttons
+    console.log('Setting up event delegation for signup buttons...');
+    document.addEventListener('click', function(e) {
+        // Handle "Sign Up to Sync Across Devices" button from save modal
+        if (e.target && e.target.id === 'signup-from-save') {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('🔥 SIGN UP TO SYNC BUTTON CLICKED (from save modal)!');
+            
+            // Close the save success modal
+            const saveSuccessModal = document.getElementById('save-success-modal');
+            console.log('Save success modal:', saveSuccessModal);
+            if (saveSuccessModal) {
+                saveSuccessModal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+                console.log('Closed save success modal');
+            }
+            
+            // Open signup modal
+            const signupModal = document.getElementById('signup-modal');
+            console.log('Signup modal:', signupModal);
+            if (signupModal) {
+                signupModal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                console.log('Opened signup modal');
+            } else {
+                console.error('❌ Signup modal not found in DOM!');
+            }
+        }
+    });
+    
+    console.log('Auth initialization complete with event delegation');
 }
 
 // Enable demo/guest mode

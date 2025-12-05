@@ -191,6 +191,19 @@ create policy "Users can update their own avatar"
 
 ## Configuration
 
+### 1. Disable Email Confirmation (For Demo/Prototype)
+
+**IMPORTANT:** For immediate user access without email verification, configure Supabase:
+
+1. Go to your Supabase Dashboard
+2. Navigate to **Authentication** → **Providers** → **Email**
+3. **Disable** "Confirm email"
+4. Save changes
+
+This allows users to sign in immediately after creating an account.
+
+### 2. Environment Variables
+
 1. Copy `.env.example` to `.env`:
    ```bash
    cp .env.example .env

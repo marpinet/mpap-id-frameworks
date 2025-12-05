@@ -24,6 +24,9 @@ export const auth = {
     // Sign up new user
     async signUp(email, password, metadata = {}) {
         try {
+            // Sign up with Supabase
+            // Note: If "Confirm email" is disabled in Supabase settings,
+            // this will automatically create a session and log the user in
             const { data, error } = await supabase.auth.signUp({
                 email,
                 password,
@@ -35,19 +38,28 @@ export const auth = {
             
             if (error) throw error;
             
-            // Auto sign in after signup (no email verification needed for demo)
-            if (data?.user) {
+            // If email confirmation is enabled and no session was created,
+            // automatically sign in the user for demo purposes
+            if (data?.user && !data.session) {
+                console.log('No session after signup, attempting auto sign-in...');
                 const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
                     email,
                     password,
                 });
                 
                 if (signInError) {
-                    console.warn('Auto sign-in after signup failed:', signInError);
-                    // Still return successful signup even if auto sign-in fails
+                    console.error('Auto sign-in failed:', signInError);
+                    // Return signup data even if auto sign-in fails
+                    // User can still log in manually
+                    return { data, error: null };
                 }
+                
+                console.log('Auto sign-in successful');
+                return { data: signInData, error: null };
             }
             
+            // Session was created successfully
+            console.log('Signup successful with session');
             return { data, error: null };
         } catch (error) {
             console.error('Sign up error:', error);

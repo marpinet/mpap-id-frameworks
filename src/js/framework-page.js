@@ -418,11 +418,33 @@ async function saveFramework() {
     // Save current step data first
     saveCurrentStepData();
     
+    // Show loading state on save button
+    const saveBtn = document.getElementById('save-framework-btn');
+    const originalBtnText = saveBtn ? saveBtn.innerHTML : '';
+    if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = `
+            <svg class="animate-spin -ml-1 mr-2 h-4 w-4 inline-block" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Saving...
+        `;
+    }
+    
+    // Simulate a brief delay to show the saving state
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
     // If user is not logged in, save to localStorage only
     if (!currentUser) {
         saveToLocalStorage();
-        showSuccess('✅ Framework saved locally! Sign in to sync across devices.');
-        // Update last saved indicator
+        // Reset button
+        if (saveBtn) {
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = originalBtnText;
+        }
+        // Show success modal even in demo mode
+        showSaveSuccessModal();
         updateAutoSaveIndicator('saved');
         return;
     }
@@ -466,8 +488,14 @@ async function saveFramework() {
             if (error) throw error;
         }
         
-        // Show success feedback
-        showSuccess('✅ Framework saved successfully!');
+        // Reset button
+        if (saveBtn) {
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = originalBtnText;
+        }
+        
+        // Show success modal
+        showSaveSuccessModal();
         updateAutoSaveIndicator('saved');
         
         // Clear localStorage since it's now in database
@@ -475,10 +503,156 @@ async function saveFramework() {
         
     } catch (error) {
         console.error('Error saving framework:', error);
+        
+        // Reset button
+        if (saveBtn) {
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = originalBtnText;
+        }
+        
         showError('Failed to save to database. Your work is saved locally.');
         // Fallback to localStorage
         saveToLocalStorage();
     }
+}
+
+// Show enhanced save success modal
+function showSaveSuccessModal() {
+    const isDemoMode = !currentUser;
+    const completion = calculateFrameworkCompletion();
+    
+    // Update modal content based on completion and mode
+    const modal = document.getElementById('save-success-modal');
+    const modalContent = modal.querySelector('.bg-white');
+    
+    let icon, title, message, actions;
+    
+    if (completion === 100) {
+        // Framework is complete - celebration!
+        icon = `<div class="mb-4 animate-bounce">
+            <div class="mx-auto h-20 w-20 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center mb-3 shadow-lg">
+                <svg class="h-12 w-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+            <div class="text-5xl mb-2">🎉 🎊 ✨</div>
+        </div>`;
+        title = `<h3 class="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-blue-600">Framework Complete!</h3>`;
+        message = `<p class="text-gray-600 dark:text-gray-400 mb-2">🌟 <strong>Amazing work!</strong> You've completed all ${currentFramework.sections.length} sections of the <strong>${currentFramework.name}</strong>.</p>
+                   <p class="text-sm text-gray-500 dark:text-gray-500 mb-6">${isDemoMode ? '💾 Saved locally in your browser' : '✅ Saved to your account and ready to share'}</p>`;
+    } else if (completion >= 50) {
+        // Good progress
+        icon = `<div class="mb-4">
+            <div class="mx-auto h-16 w-16 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                <svg class="h-10 w-10 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+            </div>
+        </div>`;
+        title = `<h3 class="text-xl font-bold mb-2 text-gray-900 dark:text-white">Great Progress!</h3>`;
+        message = `<p class="text-gray-600 dark:text-gray-400 mb-2">You're ${completion}% done with the <strong>${currentFramework.name}</strong>.</p>
+                   <p class="text-sm text-gray-500 dark:text-gray-500 mb-6">${isDemoMode ? '💾 Saved locally' : '✅ Saved to your account'}</p>`;
+    } else {
+        // Just started
+        icon = `<div class="mb-4">
+            <div class="mx-auto h-16 w-16 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                <svg class="h-10 w-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+        </div>`;
+        title = `<h3 class="text-xl font-bold mb-2 text-gray-900 dark:text-white">Framework Saved!</h3>`;
+        message = `<p class="text-gray-600 dark:text-gray-400 mb-2">Your work on <strong>${currentFramework.name}</strong> has been saved.</p>
+                   <p class="text-sm text-gray-500 dark:text-gray-500 mb-6">${isDemoMode ? '💾 Saved locally - Sign in to sync across devices' : '✅ Saved to your account'}</p>`;
+    }
+    
+    // Action buttons
+    if (isDemoMode) {
+        actions = `<div class="space-y-3">
+            <button data-close-modal="save-success-modal" class="w-full btn-primary">
+                Continue Editing
+            </button>
+            <button id="signup-from-save" class="w-full btn-secondary">
+                Sign Up to Sync Across Devices
+            </button>
+            <a href="/" class="block text-center text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400">
+                Back to Home
+            </a>
+        </div>`;
+    } else {
+        actions = `<div class="space-y-3">
+            <div class="flex gap-3">
+                <button data-close-modal="save-success-modal" class="flex-1 btn-secondary">
+                    Continue Editing
+                </button>
+                <a href="/profile.html" class="flex-1 btn-primary inline-block text-center">
+                    View All Projects
+                </a>
+            </div>
+            <button id="export-from-save" class="w-full btn-secondary">
+                📄 Export as PDF
+            </button>
+        </div>`;
+    }
+    
+    // Update modal HTML
+    modalContent.innerHTML = `
+        ${icon}
+        ${title}
+        ${message}
+        <div class="mb-6">
+            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+                <div class="bg-gradient-to-r from-primary-500 to-green-500 h-3 rounded-full transition-all duration-500" style="width: ${completion}%"></div>
+            </div>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">${completion}% Complete</p>
+        </div>
+        ${actions}
+    `;
+    
+    // Show the modal
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    
+    // Setup event listeners for new buttons
+    const signupBtn = document.getElementById('signup-from-save');
+    if (signupBtn) {
+        signupBtn.addEventListener('click', () => {
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            document.getElementById('signup-modal')?.classList.remove('hidden');
+        });
+    }
+    
+    const exportBtn = document.getElementById('export-from-save');
+    if (exportBtn) {
+        exportBtn.addEventListener('click', () => {
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            exportAsPDF();
+        });
+    }
+    
+    // Setup close button
+    const closeBtn = modalContent.querySelector('[data-close-modal="save-success-modal"]');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        });
+    }
+}
+
+// Calculate framework completion percentage
+function calculateFrameworkCompletion() {
+    if (!currentFramework || !currentFramework.sections) return 0;
+    
+    const totalSections = currentFramework.sections.length;
+    const completedSections = currentFramework.sections.filter(section => {
+        const data = frameworkData[section.id];
+        return data && data.trim().length > 0;
+    }).length;
+    
+    return Math.round((completedSections / totalSections) * 100);
 }
 
 // Export as PDF (placeholder)
